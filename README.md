@@ -1,5 +1,7 @@
 # Coding Bro Lite 1.0.8
 
+本仓库是 Coding Bro Lite 的公开源码与官方下载渠道。安装包请到 [Releases](https://github.com/MobAI-Inc/coding-bro-app/releases) 下载，问题反馈请提交 [Issues](https://github.com/MobAI-Inc/coding-bro-app/issues)。
+
 Coding Bro Lite is a desktop client for Codex-compatible coding workflows.
 
 ## Download
@@ -30,12 +32,10 @@ Set `VITE_CODING_BRO_API_URL` to your compatible service origin before building.
 For example, use `VITE_CODING_BRO_API_URL=http://localhost:3001 pnpm build:lite`.
 The production-build default is `https://api.example.invalid`; development uses
 a local service on port 3001. Authentication, model access and billing require
-a compatible service. This repository contains desktop client source; backend
-implementations and deployment credentials are excluded.
+a compatible service. This repository contains the public desktop client source.
 
 The workspace includes `apps/codex-lite`, shared `packages/product-core`, and
-desktop client components in `src` and `src-tauri`. Lite's version is 1.0.8;
-the shared full desktop application retains its own package version.
+desktop client components in `src` and `src-tauri`. Lite's version is 1.0.8.
 
 ## License
 
