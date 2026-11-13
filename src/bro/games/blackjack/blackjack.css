@@ -1,0 +1,840 @@
+.bro-blackjack {
+  padding: 0 clamp(12px, 2.4vw, 32px) 32px;
+}
+
+.bro-blackjack__table {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(680px, calc(100vh - 150px), 830px);
+  overflow: hidden;
+  border: 1px solid #bca97e;
+  border-radius: 36px 36px 120px 120px;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgb(255 255 255 / 7%), transparent 46%),
+    linear-gradient(145deg, #178053, #0b5d3c 55%, #06452f);
+  box-shadow:
+    inset 0 0 0 8px #f8f5ed,
+    inset 0 0 0 11px #c3aa72,
+    inset 0 28px 80px rgb(255 255 255 / 10%),
+    0 22px 55px rgb(61 47 25 / 18%);
+  color: #fffdf6;
+}
+
+.bro-blackjack__grain {
+  position: absolute;
+  inset: 16px;
+  z-index: -1;
+  border: 1px solid rgb(255 238 191 / 20%);
+  border-radius: 28px 28px 108px 108px;
+  background:
+    repeating-linear-gradient(
+      42deg,
+      transparent 0 9px,
+      rgb(255 255 255 / 1.4%) 9px 10px
+    ),
+    radial-gradient(ellipse, transparent 35%, rgb(0 0 0 / 10%));
+}
+
+.bro-blackjack__hud {
+  position: absolute;
+  inset: 26px 38px auto;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  font: 700 10px var(--bro-font-mono);
+  letter-spacing: 0.08em;
+}
+
+.bro-blackjack__hud div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.bro-blackjack__hud div span,
+.bro-blackjack__hud p,
+.bro-blackjack__hud > span {
+  color: rgb(255 255 255 / 58%);
+}
+
+.bro-blackjack__hud p {
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid rgb(255 238 191 / 24%);
+  border-radius: 999px;
+  background: rgb(3 55 35 / 45%);
+}
+
+.bro-blackjack__hud > span {
+  justify-self: end;
+}
+
+.bro-blackjack__scoreboard {
+  position: absolute;
+  top: 12%;
+  left: 4.5%;
+  z-index: 7;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(108px, 1fr));
+  gap: 6px;
+  width: min(26%, 286px);
+}
+
+.bro-blackjack__scoreboard > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1px 6px;
+  min-height: 48px;
+  padding: 7px 9px;
+  border: 1px solid rgb(255 255 255 / 17%);
+  border-radius: 10px;
+  background: rgb(4 48 32 / 66%);
+  box-shadow: inset 0 1px rgb(255 255 255 / 8%);
+  backdrop-filter: blur(10px);
+}
+
+.bro-blackjack__scoreboard svg {
+  grid-row: 1 / span 2;
+  color: #f7d889;
+}
+
+.bro-blackjack__scoreboard span {
+  color: rgb(255 255 255 / 58%);
+  font: 700 8px var(--bro-font-mono);
+  letter-spacing: 0.05em;
+}
+
+.bro-blackjack__scoreboard strong {
+  overflow: hidden;
+  color: white;
+  font: 800 12px var(--bro-font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bro-blackjack__scoreboard [data-result="win"] strong {
+  color: #9affbd;
+}
+
+.bro-blackjack__scoreboard [data-result="loss"] strong {
+  color: #ffb5aa;
+}
+
+.bro-blackjack__visibility-rule {
+  position: absolute;
+  top: 12%;
+  right: 4.5%;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 250px;
+  padding: 9px 11px;
+  border: 1px solid rgb(255 238 191 / 28%);
+  border-radius: 12px;
+  background: rgb(4 48 32 / 66%);
+  box-shadow: inset 0 1px rgb(255 255 255 / 8%);
+  color: #f7d889;
+  backdrop-filter: blur(10px);
+}
+
+.bro-blackjack__visibility-rule span {
+  display: grid;
+  gap: 2px;
+}
+
+.bro-blackjack__visibility-rule strong {
+  color: white;
+  font: 800 10px var(--bro-font-mono);
+}
+
+.bro-blackjack__visibility-rule small {
+  color: rgb(255 255 255 / 62%);
+  font-size: 9px;
+}
+
+.bro-blackjack__dealer {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  transform: translateX(-50%);
+}
+
+.bro-blackjack__dealer-label,
+.bro-blackjack__player-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 12px;
+  background: rgb(5 49 33 / 66%);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 9%),
+    0 8px 18px rgb(0 0 0 / 14%);
+  backdrop-filter: blur(10px);
+}
+
+.bro-blackjack__dealer-label span,
+.bro-blackjack__player-info > span:nth-child(2) {
+  display: grid;
+  gap: 2px;
+}
+
+.bro-blackjack__dealer-label strong,
+.bro-blackjack__player-info strong {
+  font: 700 10px var(--bro-font-mono);
+  letter-spacing: 0.08em;
+}
+
+.bro-blackjack__dealer-label small,
+.bro-blackjack__player-info small {
+  color: rgb(255 255 255 / 58%);
+  font-size: 9px;
+}
+
+.bro-blackjack__dealer-hand,
+.bro-blackjack__player-hand {
+  display: flex;
+  justify-content: center;
+  min-height: 105px;
+}
+
+.bro-blackjack__card {
+  width: clamp(64px, 6.8vw, 82px);
+  border-radius: 7px;
+  object-fit: cover;
+  filter: drop-shadow(0 8px 8px rgb(0 0 0 / 27%));
+  user-select: none;
+}
+
+.bro-blackjack__card + .bro-blackjack__card {
+  margin-left: -23px;
+}
+
+.bro-blackjack__bank {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  transform: translateX(-50%);
+  border: 1px solid rgb(247 215 137 / 38%);
+  border-radius: 999px;
+  background: rgb(3 40 26 / 54%);
+  color: rgb(255 255 255 / 64%);
+  font: 700 9px var(--bro-font-mono);
+  letter-spacing: 0.08em;
+  animation: bro-blackjack-bank 320ms ease-out;
+}
+
+.bro-blackjack__bank strong {
+  color: #f7d889;
+  font-size: 14px;
+}
+
+.bro-blackjack__feed {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  color: rgb(255 255 255 / 66%);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.bro-blackjack__feed.is-error {
+  max-width: min(520px, 80%);
+  color: #ffd0c8;
+  font-weight: 700;
+  text-align: center;
+  white-space: normal;
+}
+
+.bro-blackjack__player {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease;
+}
+
+.bro-blackjack__player[data-position="left"] {
+  bottom: 18%;
+  left: 5%;
+}
+
+.bro-blackjack__player[data-position="right"] {
+  right: 5%;
+  bottom: 18%;
+}
+
+.bro-blackjack__player[data-position="hero"] {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bro-blackjack__player[data-busted] {
+  filter: grayscale(0.8);
+  opacity: 0.48;
+}
+
+.bro-blackjack__player:not([data-connected]) .bro-blackjack__player-info {
+  border-style: dashed;
+  opacity: 0.72;
+}
+
+.bro-blackjack__player-info {
+  position: relative;
+  min-width: 172px;
+}
+
+.bro-blackjack__player[data-active] .bro-blackjack__player-info {
+  border-color: #f7d889;
+  box-shadow:
+    0 0 0 3px rgb(247 216 137 / 12%),
+    0 0 22px rgb(247 216 137 / 16%);
+}
+
+.bro-blackjack__avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 9%);
+  color: #f7d889;
+}
+
+.bro-blackjack__avatar svg {
+  width: 17px;
+}
+
+.bro-blackjack__player-info b {
+  margin-left: auto;
+  color: white;
+  font: 800 18px var(--bro-font-mono);
+}
+
+.bro-blackjack__player-info em {
+  position: absolute;
+  right: 8px;
+  bottom: -16px;
+  color: #f7d889;
+  font: 700 9px var(--bro-font-mono);
+  font-style: normal;
+}
+
+.bro-blackjack__player > .bro-decision-clock {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+}
+
+.bro-blackjack__player[data-position="hero"] > .bro-decision-clock {
+  top: auto;
+  right: calc(100% + 10px);
+  bottom: 10px;
+  left: auto;
+  transform: none;
+}
+
+.bro-blackjack__actions {
+  position: absolute;
+  bottom: 28px;
+  left: 4%;
+  z-index: 9;
+  display: grid;
+  grid-template-columns: 1.1fr repeat(3, minmax(78px, 1fr));
+  gap: 7px;
+  width: min(43%, 490px);
+  padding: 11px;
+  border: 1px solid rgb(255 255 255 / 17%);
+  border-radius: 20px;
+  background: rgb(4 43 28 / 78%);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 8%),
+    0 12px 26px rgb(0 0 0 / 20%);
+  opacity: 0.68;
+  backdrop-filter: blur(14px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.bro-blackjack__actions[data-active] {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.bro-blackjack__actions > .bro-decision-clock {
+  position: absolute;
+  right: 10px;
+  bottom: calc(100% + 8px);
+}
+
+.bro-blackjack__actions > div {
+  display: grid;
+  align-content: center;
+  grid-template-columns: 1fr auto;
+  gap: 0 7px;
+}
+
+.bro-blackjack__actions > div span,
+.bro-blackjack__actions > div small {
+  color: rgb(255 255 255 / 60%);
+  font: 700 8px var(--bro-font-mono);
+}
+
+.bro-blackjack__actions > div small {
+  grid-column: 1;
+}
+
+.bro-blackjack__actions > div strong {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  color: #f7d889;
+  font: 800 25px var(--bro-font-mono);
+}
+
+.bro-blackjack__actions button,
+.bro-blackjack__result button {
+  min-height: 44px;
+  border: 1px solid rgb(255 255 255 / 19%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 8%);
+  color: white;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.bro-blackjack__actions button:nth-of-type(1) {
+  border-color: rgb(125 225 166 / 32%);
+  background: linear-gradient(
+    180deg,
+    rgb(45 151 93 / 46%),
+    rgb(18 92 55 / 55%)
+  );
+}
+
+.bro-blackjack__actions button:nth-of-type(2) {
+  border-color: rgb(255 255 255 / 30%);
+  background: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 14%),
+    rgb(255 255 255 / 7%)
+  );
+}
+
+.bro-blackjack__actions button:hover:not(:disabled),
+.bro-blackjack__result button:hover {
+  transform: translateY(-2px);
+  border-color: rgb(255 255 255 / 38%);
+  background: rgb(255 255 255 / 14%);
+}
+
+.bro-blackjack__actions button:active:not(:disabled),
+.bro-blackjack__result button:active {
+  transform: translateY(1px);
+}
+
+.bro-blackjack__actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.bro-blackjack__actions .bro-blackjack__double,
+.bro-blackjack__result button {
+  border-color: #e1b95b;
+  background: linear-gradient(180deg, #ffe7a2, #d5a13b);
+  color: #302512;
+}
+
+.bro-blackjack__wager {
+  position: absolute;
+  right: 4%;
+  bottom: 28px;
+  z-index: 9;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 14px;
+  width: min(36%, 390px);
+  padding: 12px 14px;
+  border: 1px solid rgb(255 255 255 / 17%);
+  border-radius: 20px;
+  background: rgb(4 43 28 / 78%);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 8%),
+    0 12px 26px rgb(0 0 0 / 20%);
+  backdrop-filter: blur(14px);
+}
+
+.bro-blackjack__wager > span {
+  display: grid;
+  gap: 3px;
+  color: rgb(255 255 255 / 58%);
+  font: 700 8px var(--bro-font-mono);
+  letter-spacing: 0.06em;
+}
+
+.bro-blackjack__wager > span strong {
+  color: #f7d889;
+  font-size: 18px;
+}
+
+.bro-blackjack__wager > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.bro-blackjack__wager button {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  border: 3px dashed rgb(255 255 255 / 55%);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #315f4b, #163d2d);
+  box-shadow:
+    inset 0 0 0 2px rgb(0 0 0 / 22%),
+    0 6px 12px rgb(0 0 0 / 18%);
+  color: white;
+  font: 800 10px var(--bro-font-mono);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.bro-blackjack__wager button:hover:not(:disabled) {
+  transform: translateY(-3px) rotate(4deg);
+  filter: brightness(1.12);
+}
+
+.bro-blackjack__wager button.is-active {
+  border-color: rgb(255 255 255 / 82%);
+  background: linear-gradient(145deg, #f7d889, #b78222);
+  color: #302512;
+  transform: translateY(-4px);
+}
+
+.bro-blackjack__wager button:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.bro-blackjack__wager button:focus-visible {
+  outline: 2px solid #fff2bd;
+  outline-offset: 3px;
+}
+
+.bro-blackjack__wager > small {
+  grid-column: 1 / -1;
+  color: rgb(255 255 255 / 52%);
+  font-size: 9px;
+  text-align: right;
+}
+
+.bro-blackjack__server-state > div span {
+  padding: 7px 10px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 7%);
+  color: rgb(255 255 255 / 64%);
+  font: 800 9px var(--bro-font-mono);
+  letter-spacing: 0.12em;
+}
+
+.bro-blackjack__server-state > div span[data-state="settled"] {
+  border-color: rgb(125 225 166 / 42%);
+  color: #9affbd;
+}
+
+.bro-blackjack__server-state > div span[data-state="retrying"] {
+  border-color: rgb(255 208 111 / 42%);
+  color: #ffe1a3;
+}
+
+.bro-blackjack__actions button:focus-visible,
+.bro-blackjack__result button:focus-visible {
+  outline: 2px solid #fff2bd;
+  outline-offset: 3px;
+}
+
+.bro-blackjack__result {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  z-index: 40;
+  display: grid;
+  justify-items: center;
+  width: min(390px, calc(100% - 40px));
+  padding: 22px 26px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgb(255 231 162 / 44%);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgb(14 81 54 / 96%), rgb(4 48 31 / 97%));
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 12%),
+    0 24px 65px rgb(0 0 0 / 38%);
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+.bro-blackjack__result > span {
+  color: #f7d889;
+  font: 800 9px var(--bro-font-mono);
+  letter-spacing: 0.14em;
+}
+
+.bro-blackjack__result h2 {
+  margin: 8px 0 4px;
+  font-size: 26px;
+}
+
+.bro-blackjack__result p {
+  margin: 0 0 15px;
+  color: rgb(255 255 255 / 67%);
+  font-size: 12px;
+}
+
+.bro-blackjack__result .bro-table-reward {
+  margin-bottom: 15px;
+}
+
+.bro-blackjack__result button {
+  min-width: 138px;
+}
+
+.bro-blackjack__result--server > small {
+  color: rgb(255 255 255 / 62%);
+  font: 700 10px var(--bro-font-mono);
+}
+
+:root.dark .bro-blackjack__table,
+:root[data-theme="dark"] .bro-blackjack__table {
+  border-color: #1e7544;
+  border-radius: 4px;
+  background: linear-gradient(140deg, #07120c, #020704);
+  box-shadow:
+    inset 0 0 0 2px #0b2b19,
+    inset 0 0 0 3px #1d7443;
+}
+
+:root.dark .bro-blackjack__grain,
+:root[data-theme="dark"] .bro-blackjack__grain {
+  border-radius: 2px;
+  background:
+    linear-gradient(rgb(51 255 136 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(51 255 136 / 4%) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+:root.dark .bro-blackjack__dealer-label,
+:root[data-theme="dark"] .bro-blackjack__dealer-label,
+:root.dark .bro-blackjack__player-info,
+:root[data-theme="dark"] .bro-blackjack__player-info,
+:root.dark .bro-blackjack__scoreboard > div,
+:root[data-theme="dark"] .bro-blackjack__scoreboard > div,
+:root.dark .bro-blackjack__visibility-rule,
+:root[data-theme="dark"] .bro-blackjack__visibility-rule,
+:root.dark .bro-blackjack__actions,
+:root[data-theme="dark"] .bro-blackjack__actions,
+:root.dark .bro-blackjack__wager,
+:root[data-theme="dark"] .bro-blackjack__wager {
+  border-radius: 2px;
+  background: rgb(2 12 7 / 94%);
+  backdrop-filter: none;
+}
+
+:root.dark .bro-blackjack__player[data-active] .bro-blackjack__player-info,
+:root[data-theme="dark"]
+  .bro-blackjack__player[data-active]
+  .bro-blackjack__player-info {
+  border-color: #39ff88;
+  box-shadow: 0 0 18px rgb(57 255 136 / 15%);
+}
+
+:root.dark .bro-blackjack__actions .bro-blackjack__double,
+:root[data-theme="dark"] .bro-blackjack__actions .bro-blackjack__double,
+:root.dark .bro-blackjack__result button,
+:root[data-theme="dark"] .bro-blackjack__result button {
+  border-color: #39ff88;
+  border-radius: 2px;
+  background: #0b2a19;
+  color: #83ffb6;
+}
+
+@keyframes bro-blackjack-bank {
+  50% {
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@media (max-width: 900px) {
+  .bro-blackjack__table {
+    min-height: 760px;
+  }
+
+  .bro-blackjack__actions {
+    right: 3%;
+    bottom: 146px;
+    left: auto;
+    width: 56%;
+  }
+
+  .bro-blackjack__wager {
+    right: 3%;
+    bottom: 28px;
+    width: 49%;
+  }
+
+  .bro-blackjack__scoreboard {
+    width: 31%;
+  }
+
+  .bro-blackjack__visibility-rule {
+    max-width: 210px;
+  }
+}
+
+@media (max-width: 680px) {
+  .bro-blackjack {
+    padding-inline: 7px;
+  }
+
+  .bro-blackjack__table {
+    min-height: 820px;
+    border-radius: 18px;
+  }
+
+  .bro-blackjack__hud {
+    inset-inline: 22px;
+  }
+
+  .bro-blackjack__hud p,
+  .bro-blackjack__hud div span,
+  .bro-blackjack__hud > span {
+    display: none;
+  }
+
+  .bro-blackjack__scoreboard {
+    top: 70px;
+    right: 18px;
+    left: 18px;
+    grid-template-columns: repeat(5, 1fr);
+    width: auto;
+  }
+
+  .bro-blackjack__scoreboard > div {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    min-width: 0;
+    padding-inline: 4px;
+    text-align: center;
+  }
+
+  .bro-blackjack__scoreboard svg {
+    display: none;
+  }
+
+  .bro-blackjack__scoreboard span {
+    font-size: 7px;
+  }
+
+  .bro-blackjack__scoreboard strong {
+    max-width: 100%;
+    font-size: 10px;
+  }
+
+  .bro-blackjack__visibility-rule {
+    top: 132px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: max-content;
+  }
+
+  .bro-blackjack__dealer {
+    top: 23%;
+  }
+
+  .bro-blackjack__player[data-position="left"] {
+    bottom: 34%;
+    left: 3%;
+  }
+
+  .bro-blackjack__player[data-position="right"] {
+    right: 3%;
+    bottom: 34%;
+  }
+
+  .bro-blackjack__player-info {
+    min-width: 140px;
+  }
+
+  .bro-blackjack__card {
+    width: 58px;
+  }
+
+  .bro-blackjack__actions {
+    right: 12px;
+    bottom: 152px;
+    left: 12px;
+    width: auto;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bro-blackjack__wager {
+    right: 12px;
+    bottom: 88px;
+    left: 12px;
+    width: auto;
+  }
+
+  .bro-blackjack__wager > div {
+    justify-content: center;
+  }
+
+  .bro-blackjack__actions > div {
+    display: none;
+  }
+
+  .bro-blackjack__player[data-position="hero"] > .bro-decision-clock {
+    right: auto;
+    bottom: 112px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-blackjack *,
+  .bro-blackjack *::before,
+  .bro-blackjack *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

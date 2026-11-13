@@ -1,0 +1,35 @@
+{
+  "name": "@coding-bro/codex-lite",
+  "version": "1.0.8",
+  "private": true,
+  "type": "module",
+  "description": "A minimal Codex desktop app with GPT-compatible models and Stripe billing",
+  "scripts": {
+    "dev": "node build.mjs tauri dev",
+    "dev:renderer": "node build.mjs vite",
+    "build": "node build.mjs tauri build",
+    "build:local": "node build.mjs tauri build --config src-tauri/tauri.local.conf.json",
+    "build:renderer": "node build.mjs vite build",
+    "build:renderer:local": "node build.mjs vite build --mode local",
+    "typecheck": "node build.mjs tsc --noEmit",
+    "build:paths": "node ../../scripts/local-build.mjs --print-paths"
+  },
+  "dependencies": {
+    "@coding-bro/product-core": "workspace:*",
+    "@tauri-apps/api": "2.8.0",
+    "@tauri-apps/plugin-dialog": "2.4.0",
+    "@tauri-apps/plugin-opener": "2.5.4",
+    "@tauri-apps/plugin-store": "2.4.4",
+    "lucide-react": "0.542.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.8.1",
+    "@types/react": "18.3.23",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "4.7.0",
+    "typescript": "5.9.2",
+    "vite": "7.3.0"
+  }
+}

@@ -1,0 +1,145 @@
+/**
+ * TUI 视觉语言（暗色模式全局界面）
+ *
+ * 注意：这是正常 H5 控件与 Canvas 的视觉皮肤，不是字符画渲染器。
+ */
+
+.tui {
+  font-family: var(--bro-font-mono);
+  font-size: 14px;
+  /* 字符网格行高必须固定，否则网格错位 */
+  line-height: 1.4;
+  letter-spacing: 0;
+  background: var(--bro-bg-base);
+  color: var(--bro-fg-primary);
+
+  /* TUI 内禁用一切玻璃语言 */
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root.dark body,
+:root[data-theme="dark"] body {
+  font-family: var(--bro-font-mono);
+  letter-spacing: -0.01em;
+}
+
+:root.dark button,
+:root.dark input,
+:root.dark select,
+:root.dark textarea,
+:root[data-theme="dark"] button,
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  border-radius: 3px !important;
+  font-family: var(--bro-font-mono);
+}
+
+/* 字符网格容器。等宽 + 固定行高保证 Unicode box-drawing 边框对齐 */
+.tui-grid {
+  display: block;
+  white-space: pre;
+  font-variant-ligatures: none;
+  tab-size: 4;
+}
+
+/* ============================================================
+   面板边框：Unicode box-drawing 字符 │ ─ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼
+   由渲染器输出字符，CSS 只负责不破坏对齐
+   ============================================================ */
+
+.tui-panel {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ============================================================
+   状态与强调：用色彩与字符表达，不用字号变化
+   ============================================================ */
+
+.tui-accent {
+  color: var(--bro-accent);
+}
+.tui-success {
+  color: var(--bro-success);
+}
+.tui-warning {
+  color: var(--bro-warning);
+}
+.tui-danger {
+  color: var(--bro-danger);
+}
+.tui-info {
+  color: var(--bro-info);
+}
+.tui-muted {
+  color: var(--bro-fg-muted);
+}
+
+/* 反色高亮，替代 TUI 中不适用的背景块 */
+.tui-selected {
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+}
+
+/* 进度条用字符绘制：████████░░░░░░░░ 52% */
+.tui-progress {
+  font-family: var(--bro-font-mono);
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   底部状态栏
+
+   每个视图必须有，展示当前生效快捷键。
+   状态栏所列快捷键必须与实际生效的完全一致——这是验收标准，
+   不是展示性文案。
+   ============================================================ */
+
+.tui-statusbar {
+  font-family: var(--bro-font-mono);
+  font-size: 12px;
+  color: var(--bro-fg-secondary);
+  background: var(--bro-bg-sunken);
+  padding: var(--bro-space-1) var(--bro-space-2);
+  white-space: pre;
+  border-top: 1px solid var(--bro-border);
+}
+
+.tui-statusbar kbd {
+  color: var(--bro-accent);
+  font-family: inherit;
+  font-weight: 500;
+}
+
+/* ============================================================
+   光标
+
+   TUI 模式仅有的动效：光标闪烁与状态字符切换。
+   ============================================================ */
+
+.tui-cursor {
+  animation: tui-blink 1s step-end infinite;
+}
+
+@keyframes tui-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tui-cursor {
+    animation: none;
+  }
+}
+
+/* 键盘焦点。焦点环任何情况不可移除（§9） */
+.tui-focusable:focus-visible {
+  outline: 2px solid var(--bro-accent);
+  outline-offset: 0;
+}

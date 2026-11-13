@@ -1,0 +1,732 @@
+.bro-matchmaking {
+  position: relative;
+  isolation: isolate;
+  min-height: 520px;
+  overflow: clip;
+}
+
+.bro-matchmaking__scene {
+  min-height: inherit;
+  transition:
+    filter var(--bro-duration-overlay-in) var(--bro-ease-out),
+    transform var(--bro-duration-overlay-in) var(--bro-ease-out);
+}
+
+.bro-matchmaking:not([data-phase="matched"]) .bro-matchmaking__scene {
+  pointer-events: none;
+  user-select: none;
+  filter: saturate(0.68) brightness(0.64);
+  transform: scale(1.008);
+}
+
+.bro-matchmaking__veil {
+  position: absolute;
+  z-index: var(--bro-z-modal);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 4vw, 48px);
+  overflow: auto;
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      color-mix(in srgb, var(--bro-bg-base) 42%, transparent),
+      transparent 58%
+    ),
+    color-mix(in srgb, var(--bro-bg-sunken) 34%, transparent);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--bro-duration-overlay-out) var(--bro-ease-in),
+    visibility 0s linear 0s;
+}
+
+.bro-matchmaking[data-phase="matched"] .bro-matchmaking__veil {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s, var(--bro-duration-overlay-out);
+}
+
+.bro-matchmaking__panel {
+  position: relative;
+  width: min(720px, 100%);
+  padding: clamp(22px, 3.4vw, 34px);
+  overflow: hidden;
+  border: 1px solid var(--bro-glass-border);
+  border-bottom-color: var(--bro-glass-edge);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.74), transparent 38%),
+    color-mix(in srgb, var(--bro-glass-bg-heavy) 96%, var(--bro-bg-raised));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 30px 80px -32px rgba(28, 25, 23, 0.42),
+    0 8px 24px -16px rgba(28, 25, 23, 0.2);
+  color: var(--bro-fg-secondary);
+  transform: translateY(0) scale(1);
+  animation: bro-matchmaking-panel-enter var(--bro-duration-overlay-in)
+    var(--bro-ease-out) both;
+  transition:
+    transform var(--bro-duration-overlay-out) var(--bro-ease-in),
+    opacity var(--bro-duration-overlay-out) var(--bro-ease-in);
+}
+
+.bro-matchmaking__panel::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.92),
+    transparent
+  );
+  content: "";
+}
+
+.bro-matchmaking[data-phase="matched"] .bro-matchmaking__panel {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+
+.bro-matchmaking__heading {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 16px 24px;
+}
+
+.bro-matchmaking__signal {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 7px;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--bro-success) 36%, transparent);
+  border-radius: var(--bro-radius-full);
+  background: color-mix(in srgb, var(--bro-success) 9%, transparent);
+  color: var(--bro-success);
+  font: 700 11px/1 var(--bro-font-sans);
+  letter-spacing: 0.04em;
+}
+
+.bro-matchmaking__signal[data-tone="danger"] {
+  border-color: color-mix(in srgb, var(--bro-danger) 40%, transparent);
+  background: color-mix(in srgb, var(--bro-danger) 8%, transparent);
+  color: var(--bro-danger);
+}
+
+.bro-matchmaking__signal[data-tone="local"] {
+  border-color: color-mix(in srgb, var(--bro-warning) 38%, transparent);
+  background: color-mix(in srgb, var(--bro-warning) 9%, transparent);
+  color: var(--bro-warning);
+}
+
+.bro-matchmaking__eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--bro-accent);
+  font: 700 10px/1.2 var(--bro-font-mono);
+  letter-spacing: 0.12em;
+}
+
+.bro-matchmaking__heading h2 {
+  margin: 0;
+  color: var(--bro-fg-primary);
+  font: 700 clamp(23px, 3vw, 32px) / 1.12 var(--bro-font-sans);
+  letter-spacing: -0.035em;
+}
+
+.bro-matchmaking__heading p {
+  max-width: 480px;
+  margin: 8px 0 0;
+  color: var(--bro-fg-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.bro-matchmaking__found {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 126px;
+  padding: 12px 14px;
+  border: 1px solid var(--bro-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bro-bg-raised) 90%, transparent);
+  color: var(--bro-accent);
+}
+
+.bro-matchmaking__found strong {
+  font: 800 24px/1 var(--bro-font-mono);
+}
+
+.bro-matchmaking__found span {
+  grid-column: 1 / -1;
+  color: var(--bro-fg-muted);
+  font: 600 10px/1.3 var(--bro-font-sans);
+}
+
+.bro-matchmaking__timing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  color: var(--bro-fg-muted);
+  font-size: 11px;
+}
+
+.bro-matchmaking__timing span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.bro-matchmaking__timing strong {
+  color: var(--bro-fg-primary);
+  font: 700 12px var(--bro-font-mono);
+}
+
+.bro-matchmaking__progress {
+  position: relative;
+  height: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: var(--bro-radius-full);
+  background: color-mix(in srgb, var(--bro-border-strong) 56%, transparent);
+}
+
+.bro-matchmaking__progress span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--bro-accent) 62%, var(--bro-warning)),
+    var(--bro-accent)
+  );
+  box-shadow: 0 0 16px color-mix(in srgb, var(--bro-accent) 32%, transparent);
+  transform-origin: left;
+  transition: transform 250ms linear;
+}
+
+.bro-matchmaking__progress[data-indeterminate="true"] span {
+  width: 38%;
+  animation: bro-matchmaking-progress 1.2s var(--bro-ease-out) infinite;
+}
+
+.bro-matchmaking__seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.bro-matchmaking__seat {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1px solid var(--bro-border);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--bro-bg-raised) 84%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  animation: bro-matchmaking-seat-enter 360ms var(--bro-ease-out) both;
+}
+
+.bro-matchmaking__seat:nth-child(2) {
+  animation-delay: 45ms;
+}
+
+.bro-matchmaking__seat:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.bro-matchmaking__seat:nth-child(4) {
+  animation-delay: 135ms;
+}
+
+.bro-matchmaking__avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--bro-border);
+  border-radius: 50%;
+  background: var(--bro-bg-sunken);
+  color: var(--bro-fg-muted);
+}
+
+.bro-matchmaking__seat > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.bro-matchmaking__seat strong {
+  overflow: hidden;
+  color: var(--bro-fg-primary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bro-matchmaking__seat small {
+  color: var(--bro-fg-muted);
+  font-size: 10px;
+}
+
+.bro-matchmaking__seat > i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bro-border-strong);
+}
+
+.bro-matchmaking__seat:not([data-kind="open"]) {
+  border-color: color-mix(in srgb, var(--bro-success) 38%, var(--bro-border));
+}
+
+.bro-matchmaking__seat:not([data-kind="open"]) .bro-matchmaking__avatar,
+.bro-matchmaking__seat:not([data-kind="open"]) > i {
+  border-color: color-mix(in srgb, var(--bro-success) 42%, var(--bro-border));
+  background: color-mix(in srgb, var(--bro-success) 12%, var(--bro-bg-raised));
+  color: var(--bro-success);
+}
+
+.bro-matchmaking__seat:not([data-kind="open"]) > i {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--bro-success) 10%, transparent);
+}
+
+.bro-matchmaking__seat[data-kind="open"] {
+  border-style: dashed;
+}
+
+.bro-matchmaking__seat[data-kind="open"] .bro-matchmaking__avatar {
+  animation: bro-matchmaking-breathe 1.8s ease-in-out infinite;
+}
+
+.bro-matchmaking__error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--bro-danger) 30%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bro-danger) 7%, transparent);
+  color: var(--bro-danger);
+  font-size: 12px;
+}
+
+.bro-matchmaking__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.bro-matchmaking__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  cursor: pointer;
+  font: 700 12px var(--bro-font-sans);
+  transition:
+    transform var(--bro-duration-micro) var(--bro-ease-out),
+    border-color var(--bro-duration-micro) ease,
+    background var(--bro-duration-micro) ease,
+    color var(--bro-duration-micro) ease;
+}
+
+.bro-matchmaking__button--primary {
+  border-color: var(--bro-accent);
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+}
+
+.bro-matchmaking__button--primary:hover {
+  border-color: var(--bro-accent-hover);
+  background: var(--bro-accent-hover);
+}
+
+.bro-matchmaking__button--quiet {
+  border-color: var(--bro-border-strong);
+  background: color-mix(in srgb, var(--bro-bg-raised) 88%, transparent);
+  color: var(--bro-fg-secondary);
+}
+
+.bro-matchmaking__button--quiet:hover {
+  border-color: color-mix(in srgb, var(--bro-accent) 48%, var(--bro-border));
+  color: var(--bro-fg-primary);
+}
+
+.bro-matchmaking__button:active {
+  transform: scale(0.97);
+}
+
+.bro-matchmaking__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.bro-matchmaking__button:focus-visible {
+  outline: 2px solid var(--bro-accent);
+  outline-offset: 3px;
+}
+
+.bro-matchmaking__boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0 0;
+  color: var(--bro-fg-muted);
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.bro-matchmaking__dock {
+  position: absolute;
+  z-index: var(--bro-z-sticky);
+  top: 14px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  max-width: calc(100% - 28px);
+  min-height: 42px;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--bro-glass-border);
+  border-radius: var(--bro-radius-full);
+  background: color-mix(in srgb, var(--bro-bg-raised) 96%, transparent);
+  box-shadow: var(--bro-shadow-2);
+  color: var(--bro-fg-secondary);
+  transform: translateX(-50%);
+  animation: bro-matchmaking-dock-enter 320ms var(--bro-ease-out) both;
+}
+
+.bro-matchmaking__dock-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--bro-success);
+  font: 800 10px var(--bro-font-sans);
+  white-space: nowrap;
+}
+
+.bro-matchmaking__dock-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--bro-success) 12%, transparent);
+}
+
+.bro-matchmaking__dock-seats {
+  display: flex;
+  gap: 4px;
+  overflow: auto;
+}
+
+.bro-matchmaking__dock-seats > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 112px;
+  padding: 4px 7px;
+  overflow: hidden;
+  border-radius: var(--bro-radius-full);
+  background: var(--bro-bg-sunken);
+  color: var(--bro-fg-muted);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bro-matchmaking__dock-seats > span:not([data-kind="open"]) {
+  color: var(--bro-success);
+}
+
+.bro-matchmaking__dock > small {
+  color: var(--bro-fg-muted);
+  font: 600 9px var(--bro-font-sans);
+  white-space: nowrap;
+}
+
+.bro-matchmaking__dock-boundary {
+  position: relative;
+}
+
+.bro-matchmaking__dock-boundary summary {
+  min-height: 28px;
+  padding: 7px 8px;
+  border-radius: var(--bro-radius-full);
+  color: var(--bro-fg-muted);
+  cursor: pointer;
+  font: 700 9px var(--bro-font-sans);
+  list-style: none;
+  white-space: nowrap;
+  transition:
+    background var(--bro-duration-micro) ease,
+    color var(--bro-duration-micro) ease;
+}
+
+.bro-matchmaking__dock-boundary summary::-webkit-details-marker {
+  display: none;
+}
+
+.bro-matchmaking__dock-boundary summary:hover,
+.bro-matchmaking__dock-boundary[open] summary {
+  background: var(--bro-bg-sunken);
+  color: var(--bro-fg-primary);
+}
+
+.bro-matchmaking__dock-boundary summary:focus-visible {
+  outline: 2px solid var(--bro-accent);
+  outline-offset: 2px;
+}
+
+.bro-matchmaking__dock-boundary p {
+  position: absolute;
+  z-index: var(--bro-z-dropdown);
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(320px, calc(100vw - 40px));
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--bro-border-strong);
+  border-radius: 12px;
+  background: var(--bro-bg-raised);
+  box-shadow: var(--bro-shadow-2);
+  color: var(--bro-fg-secondary);
+  font: 500 11px/1.55 var(--bro-font-sans);
+}
+
+:root.dark .bro-matchmaking:not([data-phase="matched"]) .bro-matchmaking__scene,
+:root[data-theme="dark"]
+  .bro-matchmaking:not([data-phase="matched"])
+  .bro-matchmaking__scene {
+  filter: saturate(0.5) brightness(0.34);
+}
+
+:root.dark .bro-matchmaking__veil,
+:root[data-theme="dark"] .bro-matchmaking__veil {
+  background: rgba(2, 4, 3, 0.78);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root.dark .bro-matchmaking__panel,
+:root[data-theme="dark"] .bro-matchmaking__panel {
+  border-color: var(--bro-border-strong);
+  border-radius: 4px;
+  background: #050806;
+  box-shadow:
+    inset 0 0 0 1px rgba(108, 240, 154, 0.025),
+    12px 12px 0 rgba(0, 0, 0, 0.32);
+  font-family: var(--bro-font-mono);
+}
+
+:root.dark .bro-matchmaking__panel::before,
+:root[data-theme="dark"] .bro-matchmaking__panel::before {
+  height: auto;
+  inset: 6px 9px auto auto;
+  background: none;
+  color: var(--bro-fg-muted);
+  content: "[QUEUE::PRESENCE]";
+  font: 500 9px var(--bro-font-mono);
+}
+
+:root.dark .bro-matchmaking__heading h2,
+:root[data-theme="dark"] .bro-matchmaking__heading h2 {
+  font-family: var(--bro-font-mono);
+  letter-spacing: -0.03em;
+}
+
+:root.dark .bro-matchmaking__heading h2::before,
+:root[data-theme="dark"] .bro-matchmaking__heading h2::before {
+  color: var(--bro-accent);
+  content: "> ";
+}
+
+:root.dark .bro-matchmaking__signal,
+:root[data-theme="dark"] .bro-matchmaking__signal,
+:root.dark .bro-matchmaking__found,
+:root[data-theme="dark"] .bro-matchmaking__found,
+:root.dark .bro-matchmaking__seat,
+:root[data-theme="dark"] .bro-matchmaking__seat,
+:root.dark .bro-matchmaking__error,
+:root[data-theme="dark"] .bro-matchmaking__error,
+:root.dark .bro-matchmaking__button,
+:root[data-theme="dark"] .bro-matchmaking__button,
+:root.dark .bro-matchmaking__dock,
+:root[data-theme="dark"] .bro-matchmaking__dock,
+:root.dark .bro-matchmaking__dock-seats > span,
+:root[data-theme="dark"] .bro-matchmaking__dock-seats > span,
+:root.dark .bro-matchmaking__dock-boundary summary,
+:root[data-theme="dark"] .bro-matchmaking__dock-boundary summary,
+:root.dark .bro-matchmaking__dock-boundary p,
+:root[data-theme="dark"] .bro-matchmaking__dock-boundary p {
+  border-radius: 3px;
+  box-shadow: none;
+  font-family: var(--bro-font-mono);
+}
+
+:root.dark .bro-matchmaking__seat,
+:root[data-theme="dark"] .bro-matchmaking__seat,
+:root.dark .bro-matchmaking__found,
+:root[data-theme="dark"] .bro-matchmaking__found,
+:root.dark .bro-matchmaking__dock,
+:root[data-theme="dark"] .bro-matchmaking__dock {
+  background: #071009;
+}
+
+@keyframes bro-matchmaking-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+}
+
+@keyframes bro-matchmaking-seat-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes bro-matchmaking-dock-enter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+}
+
+@keyframes bro-matchmaking-progress {
+  0% {
+    transform: translateX(-105%);
+  }
+  100% {
+    transform: translateX(275%);
+  }
+}
+
+@keyframes bro-matchmaking-breathe {
+  50% {
+    border-color: color-mix(in srgb, var(--bro-accent) 40%, var(--bro-border));
+    color: var(--bro-accent);
+  }
+}
+
+@media (max-width: 760px) {
+  .bro-matchmaking__veil {
+    align-items: start;
+    padding: 12px;
+  }
+
+  .bro-matchmaking__panel {
+    margin: 10px 0;
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .bro-matchmaking__heading {
+    grid-template-columns: 1fr;
+  }
+
+  .bro-matchmaking__found {
+    grid-template-columns: auto auto 1fr;
+    min-width: 0;
+  }
+
+  .bro-matchmaking__found span {
+    grid-column: auto;
+  }
+
+  .bro-matchmaking__timing {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bro-matchmaking__seats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bro-matchmaking__actions {
+    flex-wrap: wrap;
+  }
+
+  .bro-matchmaking__button {
+    flex: 1 1 140px;
+  }
+
+  .bro-matchmaking__dock {
+    top: 8px;
+    gap: 7px;
+  }
+
+  .bro-matchmaking__dock > small {
+    display: none;
+  }
+
+  .bro-matchmaking__dock-boundary p {
+    right: -6px;
+  }
+}
+
+@media (max-width: 470px) {
+  .bro-matchmaking__seats {
+    grid-template-columns: 1fr;
+  }
+
+  .bro-matchmaking__dock-seats > span:not(:first-child) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-matchmaking__scene,
+  .bro-matchmaking__veil,
+  .bro-matchmaking__panel,
+  .bro-matchmaking__progress span,
+  .bro-matchmaking__seat,
+  .bro-matchmaking__seat[data-kind="open"] .bro-matchmaking__avatar,
+  .bro-matchmaking__dock,
+  .bro-matchmaking__button {
+    animation: none;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bro-matchmaking__veil {
+    background: color-mix(in srgb, var(--bro-bg-sunken) 92%, transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .bro-matchmaking__panel {
+    background: var(--bro-bg-raised);
+  }
+}

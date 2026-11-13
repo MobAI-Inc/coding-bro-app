@@ -1,0 +1,122 @@
+/**
+ * 围棋对局界面样式。
+ *
+ * 亮暗两套共用同一份布局，只有棋盘区的渲染方式不同（Canvas / 字符网格）。
+ * 棋盘容器带 `.bro-game-viewport`，玻璃护栏会据此关掉该区域内的模糊与
+ * 投影——对局区帧率优先，护栏由 tests/themes/tokens.test.ts 强制。
+ */
+
+.bro-go {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 24px;
+  align-items: start;
+  padding: 24px;
+}
+
+/* 棋盘容器必须是确定尺寸的方形：Canvas 渲染器按 clientWidth/clientHeight
+   算布局，容器高度若靠内容撑开就会拿到 0，什么都画不出来。 */
+.bro-go__board {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 720px;
+  min-width: 0;
+}
+
+.bro-go-canvas {
+  display: block;
+  border-radius: 8px;
+  /* 投影画在 CSS 层，画布内不再重复加，免得棋盘边缘出现双重阴影 */
+  box-shadow: var(--bro-shadow-2);
+}
+
+.bro-go__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bro-go__status {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bro-fg-primary);
+  margin: 0;
+}
+
+.bro-go__captures {
+  font-size: 13px;
+  color: var(--bro-fg-muted);
+  /* 提子数会随对局变化，等宽数字避免数字跳动时版面抖动 */
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.bro-go__hint {
+  font-size: 12px;
+  color: var(--bro-warning);
+  margin: 0;
+}
+
+.bro-go__reject {
+  font-size: 13px;
+  color: var(--bro-danger);
+  margin: 0;
+}
+
+.bro-go__pass {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid var(--bro-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--bro-fg-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 150ms ease-out;
+}
+
+.bro-go__pass:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.bro-go__pass:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   TUI 棋盘（暗色模式）
+   ============================================================ */
+
+.bro-go-tui {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* 键盘操作的落点，必须有可见焦点环——TUI 模式全靠键盘 */
+  outline-offset: 4px;
+}
+
+.bro-go-tui:focus-visible {
+  outline: 2px solid var(--bro-accent);
+}
+
+.bro-go-tui__board {
+  margin: 0;
+  /* 交叉点之间靠字符间距撑开。字号跟着容器走，19 路在窄窗口也放得下 */
+  font-size: clamp(11px, 1.6vw, 16px);
+  color: var(--bro-fg-secondary);
+}
+
+/* 光标：反色块。TUI 里靠底色而非字符变化标记位置，
+   这样光标压在棋子上时仍看得出那里是黑是白。 */
+.bro-go-tui__cursor {
+  background: var(--bro-accent);
+  color: var(--bro-bg-base);
+}
+
+.bro-go-tui__status {
+  font-family: var(--bro-font-mono);
+  font-size: 12px;
+  color: var(--bro-fg-muted);
+}

@@ -1,0 +1,443 @@
+.bro-miner.bro-game-shell {
+  width: 100%;
+  max-width: none;
+  padding: clamp(8px, 1.4vw, 18px);
+}
+
+.bro-miner__cabinet {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--bro-warning) 28%, #171b20);
+  border-radius: 20px;
+  background: #080d12;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+@media (min-width: 841px) and (min-height: 620px) {
+  .bro-miner__cabinet {
+    width: min(100%, calc(160.714dvh - 330px));
+  }
+}
+
+.bro-miner__titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 52px;
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(224, 182, 79, 0.2);
+  background:
+    linear-gradient(90deg, rgba(224, 182, 79, 0.1), transparent 36%), #0b1117;
+  color: #f4e9ca;
+}
+
+.bro-miner__identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bro-miner__identity > svg {
+  flex: 0 0 auto;
+  color: #e0b64f;
+}
+
+.bro-miner__identity h2 {
+  margin: 1px 0 0;
+  font-size: 18px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.bro-miner__titlebar p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: #b9b19d;
+  font: 600 11px var(--bro-font-mono);
+  white-space: nowrap;
+}
+
+.bro-miner__screen-frame {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 45 / 28;
+  overflow: hidden;
+  background: #071019;
+}
+
+.bro-miner__game,
+.bro-miner__briefing {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.bro-miner__game canvas {
+  cursor: crosshair;
+}
+
+.bro-miner__briefing {
+  display: grid;
+  place-content: center;
+  box-sizing: border-box;
+  padding: clamp(16px, 3vw, 32px);
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(224, 182, 79, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #172331, #070d13);
+  color: #f4e9ca;
+}
+
+.bro-miner__briefing > span {
+  font: 700 10px var(--bro-font-mono);
+  letter-spacing: 0.2em;
+  color: #e0b64f;
+}
+
+.bro-miner__briefing h3 {
+  margin: 9px 0 5px;
+  font-size: clamp(22px, 3vw, 30px);
+}
+
+.bro-miner__briefing p {
+  margin: 0;
+  color: #c5bcaa;
+  font-size: 13px;
+}
+
+.bro-miner__briefing dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: clamp(14px, 2.5vw, 24px) 0;
+}
+
+.bro-miner__briefing dl > div {
+  padding: 10px;
+  border: 1px solid rgba(224, 182, 79, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bro-miner__briefing dt {
+  font: 700 8px var(--bro-font-mono);
+  letter-spacing: 0.08em;
+  color: #aaa18f;
+}
+
+.bro-miner__briefing dd {
+  margin: 5px 0 0;
+  font: 700 13px var(--bro-font-mono);
+  color: #f0d58d;
+}
+
+.bro-miner__briefing button {
+  justify-self: center;
+  min-width: 150px;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid #e0b64f;
+  border-radius: 8px;
+  background: #e0b64f;
+  color: #17130d;
+  font: 800 12px var(--bro-font-mono);
+  cursor: pointer;
+  transition:
+    filter 150ms ease,
+    background-color 150ms ease;
+}
+
+.bro-miner__hud {
+  display: grid;
+  grid-template-columns:
+    repeat(5, minmax(58px, auto)) minmax(88px, 0.7fr)
+    minmax(150px, 1.4fr) auto;
+  align-items: stretch;
+  min-width: 0;
+  border-top: 1px solid rgba(224, 182, 79, 0.2);
+  background: rgba(6, 12, 16, 0.98);
+  color: #f4e9ca;
+  font-family: var(--bro-font-mono);
+}
+
+.bro-miner__hud > div:not(.bro-miner__meter):not(.bro-miner__actions) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 7px 10px;
+  border-right: 1px solid rgba(224, 182, 79, 0.14);
+}
+
+.bro-miner__hud span {
+  overflow: hidden;
+  color: #969d9f;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bro-miner__hud strong {
+  margin-top: 1px;
+  color: #f0cb6d;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.bro-miner__hud > .bro-miner__meter {
+  position: relative;
+  align-self: center;
+  height: 8px;
+  margin: 0 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #22231e;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.bro-miner__meter i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #be7d24, #f4ce6c 72%, #fff1b2);
+  box-shadow: 0 0 12px rgba(224, 182, 79, 0.38);
+  transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bro-miner__hud p {
+  align-self: center;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 12px;
+  overflow: hidden;
+  border-left: 2px solid #d8a83a;
+  color: #cbd0cb;
+  font-size: 10px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bro-miner__hud button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 112px;
+  min-height: 44px;
+  margin: 6px;
+  padding: 0 13px;
+  border: 1px solid #e0b64f;
+  border-radius: 8px;
+  background: #e0b64f;
+  color: #17130d;
+  font: 800 12px var(--bro-font-mono);
+  cursor: pointer;
+  transition:
+    filter 150ms ease,
+    background-color 150ms ease;
+}
+
+.bro-miner__hud button:hover:not(:disabled),
+.bro-miner__briefing button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.bro-miner__hud button:active:not(:disabled),
+.bro-miner__briefing button:active:not(:disabled) {
+  filter: brightness(0.94);
+}
+
+.bro-miner__hud button:disabled {
+  border-color: rgba(224, 182, 79, 0.28);
+  background: #2b291f;
+  color: #8f8a7c;
+  cursor: wait;
+}
+
+.bro-miner__hud button:focus-visible,
+.bro-miner__briefing button:focus-visible {
+  outline: 3px solid rgba(240, 203, 109, 0.52);
+  outline-offset: 2px;
+}
+
+.bro-miner__hud kbd {
+  padding: 2px 5px;
+  border: 1px solid rgba(23, 19, 13, 0.3);
+  border-radius: 4px;
+  font-size: 9px;
+}
+
+.bro-miner__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  padding: 0;
+}
+
+.bro-miner__actions button {
+  flex: 1;
+  min-width: 132px;
+}
+
+.bro-miner__actions button:first-child:not(:last-child) {
+  border-color: rgba(224, 182, 79, 0.44);
+  background: transparent;
+  color: #e8d39d;
+}
+
+:root.dark .bro-miner__cabinet,
+:root[data-theme="dark"] .bro-miner__cabinet {
+  border-color: rgba(108, 240, 154, 0.24);
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(61, 214, 116, 0.06);
+}
+
+:root.dark .bro-miner__titlebar,
+:root[data-theme="dark"] .bro-miner__titlebar,
+:root.dark .bro-miner__hud,
+:root[data-theme="dark"] .bro-miner__hud {
+  border-color: rgba(108, 240, 154, 0.18);
+  background-color: #050b07;
+}
+
+@media (max-width: 1100px) {
+  .bro-miner__hud {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .bro-miner__hud > .bro-miner__meter {
+    grid-column: 1 / 3;
+    min-width: 0;
+  }
+
+  .bro-miner__hud p {
+    grid-column: 3 / 5;
+  }
+
+  .bro-miner__hud > button,
+  .bro-miner__actions {
+    grid-column: 5;
+  }
+
+  .bro-miner__actions button {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+}
+
+@media (max-width: 620px) {
+  .bro-miner.bro-game-shell {
+    padding: 8px;
+  }
+
+  .bro-miner__cabinet {
+    border-radius: 12px;
+  }
+
+  .bro-miner__titlebar {
+    min-height: 48px;
+    padding: 6px 10px;
+  }
+
+  .bro-miner__identity {
+    gap: 7px;
+  }
+
+  .bro-miner__identity h2 {
+    font-size: 16px;
+  }
+
+  .bro-miner__titlebar p {
+    font-size: 9px;
+  }
+
+  .bro-miner__briefing dl > div {
+    padding: 7px 4px;
+  }
+
+  .bro-miner__hud > div:not(.bro-miner__meter):not(.bro-miner__actions) {
+    padding: 7px 3px;
+    text-align: center;
+  }
+
+  .bro-miner__hud span {
+    font-size: 7px;
+    letter-spacing: 0.06em;
+  }
+
+  .bro-miner__hud strong {
+    font-size: 14px;
+  }
+
+  .bro-miner__hud > .bro-miner__meter {
+    grid-column: 1 / 3;
+  }
+
+  .bro-miner__hud p {
+    grid-column: 3 / -1;
+  }
+
+  .bro-miner__hud > button,
+  .bro-miner__actions {
+    grid-column: 1 / -1;
+  }
+
+  .bro-miner__hud button {
+    justify-content: center;
+    margin: 4px 6px;
+  }
+
+  .bro-miner__actions {
+    gap: 8px;
+    padding: 0 2px;
+  }
+}
+
+@media (max-width: 430px) {
+  .bro-miner__titlebar p {
+    display: none;
+  }
+
+  .bro-miner__briefing {
+    padding: 12px;
+  }
+
+  .bro-miner__briefing h3 {
+    margin-top: 5px;
+    font-size: 20px;
+  }
+
+  .bro-miner__briefing dl {
+    margin: 9px 0;
+  }
+
+  .bro-miner__briefing button {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-miner__meter i,
+  .bro-miner__hud button,
+  .bro-miner__briefing button {
+    transition: none;
+  }
+}

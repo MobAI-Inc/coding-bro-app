@@ -1,0 +1,428 @@
+{
+  "target": "src/bro/games/billiards/logic/rules.ts",
+  "tests": "tests/bro/games/billiards/rules.test.ts",
+  "mutants": [
+    {
+      "id": "M1",
+      "desc": "全色上界 7 → 8：8 号被算进全色",
+      "from": "if (id >= 1 && id <= 7) return \"solids\";",
+      "to": "if (id >= 1 && id <= 8) return \"solids\";"
+    },
+    {
+      "id": "M2",
+      "desc": "全色下界 1 → 0：母球被算进全色",
+      "from": "if (id >= 1 && id <= 7)",
+      "to": "if (id >= 0 && id <= 7)"
+    },
+    {
+      "id": "M3",
+      "desc": "花色下界 9 → 8：8 号被算进花色",
+      "from": "if (id >= 9 && id <= 15) return \"stripes\";",
+      "to": "if (id >= 8 && id <= 15) return \"stripes\";"
+    },
+    {
+      "id": "M4",
+      "desc": "花色上界 15 → 14：15 号无组",
+      "from": "id <= 15) return \"stripes\"",
+      "to": "id <= 14) return \"stripes\""
+    },
+    {
+      "id": "M5",
+      "desc": "otherGroup 恒等",
+      "from": "return group === \"solids\" ? \"stripes\" : \"solids\";",
+      "to": "return group;"
+    },
+    {
+      "id": "M6",
+      "desc": "otherSeat 恒等",
+      "from": "return seat === 0 ? 1 : 0;",
+      "to": "return seat;"
+    },
+    {
+      "id": "M7",
+      "desc": "groupOfSeat 判反：全色归属方拿到花色",
+      "from": "return state.solidsSeat === seat ? \"solids\" : \"stripes\";",
+      "to": "return state.solidsSeat === seat ? \"stripes\" : \"solids\";"
+    },
+    {
+      "id": "M8",
+      "desc": "8 号摆到别的槽位",
+      "from": "  10, EIGHT_BALL_ID, 3,",
+      "to": "  10, 3, EIGHT_BALL_ID,"
+    },
+    {
+      "id": "M9",
+      "desc": "底排两角同组（6 与 7 都是全色）",
+      "from": "  6, 13, 7, 14, 15,",
+      "to": "  6, 13, 14, 15, 7,"
+    },
+    {
+      "id": "M10",
+      "desc": "摆球位置自己重算，用 BALL_DIAMETER 当球心距（丢掉 rackBalls 的余量）",
+      "from": "balls.push({ ...racked.balls[slot + 1], id: RACK_ORDER[slot] });",
+      "to": "balls.push({ ...racked.balls[slot + 1], id: RACK_ORDER[slot], pos: { x: racked.balls[slot + 1].pos.x, y: racked.balls[slot + 1].pos.y > 0 ? racked.balls[slot + 1].pos.y - slot : racked.balls[slot + 1].pos.y + slot } });"
+    },
+    {
+      "id": "M11",
+      "desc": "摆球不排序，id 与下标脱钩",
+      "from": "  balls.sort((a, b) => a.id - b.id);",
+      "to": "  void 0;"
+    },
+    {
+      "id": "M12",
+      "desc": "rackEightBall 忽略 breaker，恒由 0 开球",
+      "from": "    turn: breaker,",
+      "to": "    turn: 0,"
+    },
+    {
+      "id": "M13",
+      "desc": "remainingBalls 把入袋的也算上",
+      "from": "return state.table.balls.filter((b) => !b.pocketed).map((b) => b.id);",
+      "to": "return state.table.balls.map((b) => b.id);"
+    },
+    {
+      "id": "M14",
+      "desc": "remainingOfGroup 不排除入袋的球",
+      "from": "    .filter((b) => !b.pocketed && groupOfBall(b.id) === group)",
+      "to": "    .filter((b) => groupOfBall(b.id) === group)"
+    },
+    {
+      "id": "M15",
+      "desc": "台面开放时 8 号也算合法目标",
+      "from": "      (id) => id !== CUE_BALL_ID && id !== EIGHT_BALL_ID,",
+      "to": "      (id) => id !== CUE_BALL_ID,"
+    },
+    {
+      "id": "M16",
+      "desc": "台面开放时母球也算合法目标",
+      "from": "      (id) => id !== CUE_BALL_ID && id !== EIGHT_BALL_ID,",
+      "to": "      (id) => id !== EIGHT_BALL_ID,"
+    },
+    {
+      "id": "M17",
+      "desc": "本组清完后仍只能碰本组（8 号永远打不了）",
+      "from": "  return own.length > 0 ? own : [EIGHT_BALL_ID];",
+      "to": "  return own;"
+    },
+    {
+      "id": "M18",
+      "desc": "本组没清完也允许打 8 号",
+      "from": "  return own.length > 0 ? own : [EIGHT_BALL_ID];",
+      "to": "  return [...own, EIGHT_BALL_ID];"
+    },
+    {
+      "id": "M19",
+      "desc": "cueBallOf 按下标查而非 id",
+      "from": "return state.table.balls.find((b) => b.id === CUE_BALL_ID);",
+      "to": "return state.table.balls[CUE_BALL_ID];"
+    },
+    {
+      "id": "M20",
+      "desc": "firstContact 只查 a 侧，依赖 solver 的 i<j 内部约定",
+      "from": "    if (event.b === CUE_BALL_ID) return event.a;",
+      "to": "    void 0;"
+    },
+    {
+      "id": "M21",
+      "desc": "firstContact 取最后一次接触而非第一次",
+      "from": "    if (event.a === CUE_BALL_ID) return event.b;",
+      "to": "    if (event.a === CUE_BALL_ID && events.indexOf(event) === events.length - 1) return event.b;"
+    },
+    {
+      "id": "M22",
+      "desc": "pocketedIn 反序，定组取到最后一颗",
+      "from": "return events.filter((e) => e.kind === \"pocketed\").map((e) => e.ball);",
+      "to": "return events.filter((e) => e.kind === \"pocketed\").map((e) => e.ball).reverse();"
+    },
+    {
+      "id": "M23",
+      "desc": "吃库判定从头数起，接触前的吃库也算数",
+      "from": "  return events\n    .slice(start + 1)",
+      "to": "  return events\n    .slice(0)"
+    },
+    {
+      "id": "M24",
+      "desc": "没碰到球时也算有效果",
+      "from": "  if (start < 0) return false;",
+      "to": "  if (start < 0) return true;"
+    },
+    {
+      "id": "M25",
+      "desc": "吃库判定不认进球",
+      "from": "    .some((e) => e.kind === \"cushion-hit\" || e.kind === \"pocketed\");",
+      "to": "    .some((e) => e.kind === \"cushion-hit\");"
+    },
+    {
+      "id": "M26",
+      "desc": "distinctRailBalls 数次数不去重",
+      "from": "  const seen = new Set<number>();",
+      "to": "  const seen: number[] = [] as unknown as Set<number> & number[];"
+    },
+    {
+      "id": "M27",
+      "desc": "开球吃库门槛 4 → 3",
+      "from": "export const BREAK_RAIL_REQUIREMENT = 4;",
+      "to": "export const BREAK_RAIL_REQUIREMENT = 3;"
+    },
+    {
+      "id": "M28",
+      "desc": "开球门槛判定用 > 而非 >=",
+      "from": "      distinctRailBalls(events) >= BREAK_RAIL_REQUIREMENT;",
+      "to": "      distinctRailBalls(events) > BREAK_RAIL_REQUIREMENT;"
+    },
+    {
+      "id": "M29",
+      "desc": "开球进 8 判直接赢（酒吧规则）",
+      "from": "        continues: true,\n        rerack: true,",
+      "to": "        continues: false,\n        rerack: false,"
+    },
+    {
+      "id": "M30",
+      "desc": "开球母球落袋不算犯规",
+      "from": "    const foul: Foul | null = cueScratched\n      ? \"cue_pocketed\"\n      : legalBreak",
+      "to": "    const foul: Foul | null = false\n      ? \"cue_pocketed\"\n      : legalBreak"
+    },
+    {
+      "id": "M31",
+      "desc": "开球进球即定组",
+      "from": "      continues: foul === null && objectPocketed.length > 0,\n      rerack: false,\n      assigned: null,",
+      "to": "      continues: foul === null && objectPocketed.length > 0,\n      rerack: false,\n      assigned: groupOfBall(objectPocketed[0] ?? -1),"
+    },
+    {
+      "id": "M32",
+      "desc": "开球把母球也算作进球 —— 等价变异体：母球落袋时 cueScratched 已把 foul 钉死，continues 又以 foul===null 为前提，两个下游都被短路",
+      "from": "    const objectPocketed = pocketed.filter((id) => id !== CUE_BALL_ID);",
+      "to": "    const objectPocketed = pocketed.slice();",
+      "equivalent": true
+    },
+    {
+      "id": "M33",
+      "desc": "开球犯规仍续杆",
+      "from": "      continues: foul === null && objectPocketed.length > 0,",
+      "to": "      continues: objectPocketed.length > 0,"
+    },
+    {
+      "id": "M34",
+      "desc": "开球分支去掉，走常规判罚",
+      "from": "  if (!before.broken) {",
+      "to": "  if (false) {"
+    },
+    {
+      "id": "M35",
+      "desc": "母球落袋不算犯规（常规杆）",
+      "from": "  const foul: Foul | null = cueScratched\n    ? \"cue_pocketed\"\n    : firstContact === null",
+      "to": "  const foul: Foul | null = false\n    ? \"cue_pocketed\"\n    : firstContact === null"
+    },
+    {
+      "id": "M36",
+      "desc": "没碰到球不算犯规",
+      "from": "    : firstContact === null\n      ? \"no_contact\"",
+      "to": "    : false\n      ? \"no_contact\""
+    },
+    {
+      "id": "M37",
+      "desc": "先碰错球不算犯规",
+      "from": "      : !targets.includes(firstContact)\n        ? \"wrong_first_contact\"",
+      "to": "      : false\n        ? \"wrong_first_contact\""
+    },
+    {
+      "id": "M38",
+      "desc": "碰到但没效果不算犯规",
+      "from": "        : !railOrPocketAfterContact(events)\n          ? \"no_rail\"",
+      "to": "        : false\n          ? \"no_rail\""
+    },
+    {
+      "id": "M39",
+      "desc": "合法目标取对手那一组",
+      "from": "  const targets = legalTargets(before, shooter);",
+      "to": "  const targets = legalTargets(before, otherSeat(shooter));"
+    },
+    {
+      "id": "M40",
+      "desc": "清台判据取击球后剩余而非击球前",
+      "from": "      ownGroup !== null && remainingOfGroup(before, ownGroup).length === 0;",
+      "to": "      ownGroup !== null && remainingOfGroup(before, ownGroup).filter((id) => !pocketed.includes(id)).length === 0;"
+    },
+    {
+      "id": "M41",
+      "desc": "进 8 号只要不犯规就算赢，不看清台",
+      "from": "    const won = clearedBefore && foul === null && !cueScratched;",
+      "to": "    const won = foul === null && !cueScratched;"
+    },
+    {
+      "id": "M42",
+      "desc": "进 8 号只要清台就算赢，不看犯规",
+      "from": "    const won = clearedBefore && foul === null && !cueScratched;",
+      "to": "    const won = clearedBefore;"
+    },
+    {
+      "id": "M43",
+      "desc": "8 号终局判胜负时输赢反了",
+      "from": "      winner: won ? shooter : otherSeat(shooter),",
+      "to": "      winner: won ? otherSeat(shooter) : shooter,"
+    },
+    {
+      "id": "M44",
+      "desc": "8 号落袋后仍续杆",
+      "from": "      continues: false,\n      rerack: false,\n      assigned: null,\n      winner: won",
+      "to": "      continues: true,\n      rerack: false,\n      assigned: null,\n      winner: won"
+    },
+    {
+      "id": "M45",
+      "desc": "犯规杆也定组",
+      "from": "  if (before.solidsSeat === null && foul === null) {",
+      "to": "  if (before.solidsSeat === null) {"
+    },
+    {
+      "id": "M46",
+      "desc": "已定组还能重定",
+      "from": "  if (before.solidsSeat === null && foul === null) {",
+      "to": "  if (foul === null) {"
+    },
+    {
+      "id": "M47",
+      "desc": "定组取最后一颗落袋的球",
+      "from": "    for (const id of pocketed) {\n      const group = groupOfBall(id);\n      if (group !== null) {\n        assigned = group;\n        break;\n      }\n    }",
+      "to": "    for (const id of pocketed) {\n      const group = groupOfBall(id);\n      if (group !== null) {\n        assigned = group;\n      }\n    }"
+    },
+    {
+      "id": "M48",
+      "desc": "续杆判定用击球前的组，忽略本杆刚定的组",
+      "from": "  const groupAfter = assigned ?? groupOfSeat(before, shooter);",
+      "to": "  const groupAfter = groupOfSeat(before, shooter);"
+    },
+    {
+      "id": "M49",
+      "desc": "进任何球都续杆，不看是不是自己的组",
+      "from": "  const pocketedOwn =\n    groupAfter !== null &&\n    pocketed.some((id) => groupOfBall(id) === groupAfter);",
+      "to": "  const pocketedOwn = pocketed.some((id) => groupOfBall(id) !== null);"
+    },
+    {
+      "id": "M50",
+      "desc": "犯规也能续杆",
+      "from": "    continues: foul === null && pocketedOwn,",
+      "to": "    continues: pocketedOwn,"
+    },
+    {
+      "id": "M51",
+      "desc": "applyOutcome 续杆判反",
+      "from": "  const turn = outcome.continues ? shooter : otherSeat(shooter);",
+      "to": "  const turn = outcome.continues ? otherSeat(shooter) : shooter;"
+    },
+    {
+      "id": "M52",
+      "desc": "定组归属搞反：进全色的人拿花色",
+      "from": "      : outcome.assigned === \"solids\"\n        ? shooter\n        : otherSeat(shooter);",
+      "to": "      : outcome.assigned === \"solids\"\n        ? otherSeat(shooter)\n        : shooter;"
+    },
+    {
+      "id": "M53",
+      "desc": "持球在手顺延，不清零",
+      "from": "    ballInHand: outcome.foul !== null,",
+      "to": "    ballInHand: before.ballInHand || outcome.foul !== null,"
+    },
+    {
+      "id": "M54",
+      "desc": "犯规不给持球在手",
+      "from": "    ballInHand: outcome.foul !== null,",
+      "to": "    ballInHand: false,"
+    },
+    {
+      "id": "M55",
+      "desc": "重摆时开球权换人",
+      "from": "    return rackEightBall(before.turn);",
+      "to": "    return rackEightBall(otherSeat(before.turn));"
+    },
+    {
+      "id": "M56",
+      "desc": "重摆分支去掉",
+      "from": "  if (outcome.rerack) {\n    return rackEightBall(before.turn);\n  }",
+      "to": "  void 0;"
+    },
+    {
+      "id": "M57",
+      "desc": "摆放范围不减球半径，球心可贴库边",
+      "from": "    abs(pos.x) <= sub(HALF_LENGTH, BALL_RADIUS) &&",
+      "to": "    abs(pos.x) <= HALF_LENGTH &&"
+    },
+    {
+      "id": "M58",
+      "desc": "摆放范围 y 轴不减球半径",
+      "from": "    abs(pos.y) <= sub(HALF_WIDTH, BALL_RADIUS)",
+      "to": "    abs(pos.y) <= HALF_WIDTH"
+    },
+    {
+      "id": "M59",
+      "desc": "摆放范围边界用 < 而非 <=",
+      "from": "    abs(pos.x) <= sub(HALF_LENGTH, BALL_RADIUS) &&",
+      "to": "    abs(pos.x) < sub(HALF_LENGTH, BALL_RADIUS) &&"
+    },
+    {
+      "id": "M60",
+      "desc": "去掉袋口检查",
+      "from": "  if (pocketAt(pos) !== null) {\n    return { ok: false, reason: \"in_pocket\" };\n  }",
+      "to": "  void 0;"
+    },
+    {
+      "id": "M61",
+      "desc": "去掉持球在手检查，随时可摆球",
+      "from": "  if (!state.ballInHand) {\n    return { ok: false, reason: \"not_in_hand\" };\n  }",
+      "to": "  void 0;"
+    },
+    {
+      "id": "M62",
+      "desc": "重叠阈值用半径而非直径",
+      "from": "    if (vLen(vSub(ball.pos, pos)) < BALL_DIAMETER) {",
+      "to": "    if (vLen(vSub(ball.pos, pos)) < BALL_RADIUS) {"
+    },
+    {
+      "id": "M63",
+      "desc": "重叠判定不排除入袋的球",
+      "from": "    if (ball.pocketed || ball.id === CUE_BALL_ID) continue;",
+      "to": "    if (ball.id === CUE_BALL_ID) continue;"
+    },
+    {
+      "id": "M64",
+      "desc": "摆球后不消耗持球在手权利",
+      "from": "  return { ok: true, state: { ...state, table: { balls }, ballInHand: false } };",
+      "to": "  return { ok: true, state: { ...state, table: { balls } } };"
+    },
+    {
+      "id": "M65",
+      "desc": "摆球不清速度 —— 等价变异体：strike 无条件覆写 vel/spin/spinZ，探针实测带残速与否末态逐位相同",
+      "from": "        { ...b, pos, vel: VEC2_ZERO, spin: VEC2_ZERO, spinZ: ZERO, pocketed: false }",
+      "to": "        { ...b, pos, pocketed: false }",
+      "equivalent": true
+    },
+    {
+      "id": "M66",
+      "desc": "摆球不清 pocketed 标记",
+      "from": "        { ...b, pos, vel: VEC2_ZERO, spin: VEC2_ZERO, spinZ: ZERO, pocketed: false }",
+      "to": "        { ...b, pos, vel: VEC2_ZERO, spin: VEC2_ZERO, spinZ: ZERO }"
+    },
+    {
+      "id": "M67",
+      "desc": "终局后仍可击球",
+      "from": "  if (state.winner !== null) {\n    return { ok: false, reason: \"game_over\" };\n  }",
+      "to": "  void 0;"
+    },
+    {
+      "id": "M68",
+      "desc": "母球在袋里也允许击球",
+      "from": "  if (cue === undefined || cue.pocketed) {",
+      "to": "  if (false) {"
+    },
+    {
+      "id": "M69",
+      "desc": "shoot 用击球后的状态判罚，而非击球前",
+      "from": "  const outcome = judge(state, events);",
+      "to": "  const outcome = judge({ ...state, table: settled }, events);"
+    },
+    {
+      "id": "M70",
+      "desc": "shoot 不推进状态，返回击球前的球桌",
+      "from": "  return { ok: true, state: applyOutcome(state, settled, outcome), events, outcome };",
+      "to": "  return { ok: true, state: applyOutcome(state, state.table, outcome), events, outcome };"
+    }
+  ]
+}

@@ -1,0 +1,977 @@
+.bro-game-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px;
+  color: var(--bro-fg-primary);
+}
+.bro-game-hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.bro-game-kicker {
+  font:
+    600 10px/1.2 ui-monospace,
+    SFMono-Regular,
+    monospace;
+  letter-spacing: 2px;
+  color: var(--bro-accent);
+}
+.bro-game-hero h2 {
+  font-size: 30px;
+  margin: 5px 0;
+}
+.bro-game-hero p {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin: 0;
+  color: var(--bro-fg-secondary);
+  font-size: 13px;
+}
+.bro-game-pot {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid var(--bro-border);
+  border-radius: 14px;
+  background: var(--bro-bg-elevated);
+}
+.bro-game-pot span {
+  font-size: 11px;
+  color: var(--bro-fg-muted);
+}
+.bro-game-pot strong {
+  grid-column: 2;
+  font-size: 20px;
+}
+.bro-baccarat__table {
+  position: relative;
+  overflow: hidden;
+  min-height: 680px;
+  padding: 122px 34px 34px;
+  border: 1px solid rgba(181, 151, 75, 0.24);
+  border-radius: 30px;
+  background: radial-gradient(
+    circle at 50% 0,
+    rgba(255, 255, 255, 0.9),
+    rgba(249, 247, 242, 0.76) 35%,
+    rgba(226, 222, 212, 0.78)
+  );
+  box-shadow:
+    0 22px 70px rgba(69, 60, 44, 0.14),
+    inset 0 1px white;
+}
+.bro-baccarat__table::after {
+  content: "";
+  position: absolute;
+  z-index: 12;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(255, 224, 125, 0.34),
+    transparent 44%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+.bro-baccarat__table.is-win::after {
+  animation: bro-baccarat-table-win 0.9s ease-out;
+}
+.bro-baccarat__ambient {
+  position: absolute;
+  inset: -25% 15% auto;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(229, 194, 109, 0.26),
+    transparent 65%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+}
+.bro-baccarat__dealer {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 16px;
+  width: 82px;
+  height: 90px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.bro-baccarat__dealer-head {
+  position: absolute;
+  left: 29px;
+  top: 0;
+  width: 25px;
+  height: 29px;
+  border-radius: 48% 48% 42% 42%;
+  background: linear-gradient(145deg, #d7b999, #a67f60);
+  box-shadow: inset -5px -2px rgba(80, 50, 33, 0.12);
+}
+.bro-baccarat__dealer-head::before {
+  content: "";
+  position: absolute;
+  inset: -4px -2px 10px;
+  border-radius: 50% 50% 35% 35%;
+  background: #29251f;
+}
+.bro-baccarat__dealer-body {
+  position: absolute;
+  left: 17px;
+  top: 28px;
+  width: 49px;
+  height: 45px;
+  border-radius: 20px 20px 5px 5px;
+  background: linear-gradient(130deg, #302d28, #111);
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+}
+.bro-baccarat__dealer-body::after {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 0;
+  width: 8px;
+  height: 35px;
+  background: linear-gradient(90deg, #eee, #fff);
+  clip-path: polygon(0 0, 100% 0, 75% 100%, 25% 100%);
+}
+.bro-baccarat__dealer-body::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 17px;
+  top: 24px;
+  width: 16px;
+  height: 50px;
+  border-radius: 9px;
+  background: linear-gradient(#d7b999, #a67f60);
+  transform-origin: 50% 0;
+}
+.bro-baccarat__table.is-dealing .bro-baccarat__dealer-body::before {
+  animation: bro-dealer-arm 0.7s ease-in-out infinite alternate;
+}
+.bro-baccarat__dealer i {
+  position: absolute;
+  top: 74px;
+  left: 0;
+  right: 0;
+  font:
+    600 8px ui-monospace,
+    monospace;
+  letter-spacing: 2px;
+  color: #786a54;
+}
+.bro-baccarat__shoe {
+  position: absolute;
+  z-index: 2;
+  right: 7%;
+  top: 55px;
+  width: 74px;
+  height: 48px;
+  transform: skew(-8deg);
+  border: 1px solid rgba(116, 90, 43, 0.2);
+  border-radius: 10px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.88),
+    rgba(195, 185, 164, 0.7)
+  );
+  box-shadow: 0 8px 16px rgba(61, 50, 29, 0.12);
+}
+.bro-baccarat__shoe span {
+  position: absolute;
+  inset: 7px 17px 8px 8px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(90deg, #f8f6f0 0 3px, #c9c2b4 3px 4px);
+}
+.bro-baccarat__shoe b {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  font:
+    700 8px ui-monospace,
+    monospace;
+  color: #887038;
+}
+.bro-baccarat__table.is-dealing .bro-baccarat__shoe {
+  animation: bro-baccarat-shoe 0.34s ease-in-out infinite alternate;
+}
+.bro-baccarat__seats {
+  position: absolute;
+  z-index: 3;
+  inset: 62px 20px auto;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.bro-baccarat__seats span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ddd4c3, #aaa18f);
+  box-shadow: 0 5px 12px rgba(64, 52, 32, 0.13);
+  font:
+    700 8px ui-monospace,
+    monospace;
+  color: #554b3d;
+}
+.bro-baccarat__seats span:nth-child(2),
+.bro-baccarat__seats span:nth-child(5) {
+  transform: translateY(38px);
+}
+.bro-baccarat__seats span:nth-child(3),
+.bro-baccarat__seats span:nth-child(4) {
+  visibility: hidden;
+}
+.bro-baccarat__seats span.is-you {
+  border-color: #d3a930;
+  background: #28251f;
+  color: #f5d97f;
+}
+.bro-baccarat__feltline {
+  position: absolute;
+  inset: 15px;
+  border: 1px solid rgba(181, 151, 75, 0.25);
+  border-radius: 22px;
+  pointer-events: none;
+}
+.bro-baccarat__hands {
+  display: grid;
+  grid-template-columns: 1fr 50px 1fr;
+  align-items: center;
+  text-align: center;
+}
+.bro-baccarat__cards {
+  display: flex;
+  justify-content: center;
+  min-height: 132px;
+  margin: 12px auto 3px;
+}
+.bro-baccarat__vs {
+  font:
+    600 11px ui-monospace,
+    monospace;
+  color: #9a8e77;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.bro-baccarat__hand > span {
+  font:
+    600 11px ui-monospace,
+    monospace;
+  letter-spacing: 1.6px;
+  color: #7b715f;
+}
+.bro-baccarat__hand > strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.bro-baccarat__hand.is-winning > strong {
+  color: #9a7317;
+}
+.bro-baccarat__card {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 82px;
+  height: 118px;
+  margin: 0 -8px;
+  border: 1px solid rgba(128, 110, 75, 0.2);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #fff, #f0ede7);
+  box-shadow: 0 14px 30px rgba(67, 55, 34, 0.17);
+  font:
+    700 24px Georgia,
+    serif;
+  color: #2d2820;
+  transform: rotate(-4deg);
+  overflow: hidden;
+}
+.bro-baccarat__card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.bro-baccarat__card:nth-child(2) {
+  --card-rest: rotate(5deg) translateY(5px);
+  transform: rotate(5deg) translateY(5px);
+}
+.bro-baccarat__card:nth-child(3) {
+  --card-rest: rotate(10deg) translateY(10px);
+  transform: rotate(10deg) translateY(10px);
+}
+.bro-baccarat__card[data-red] {
+  color: #a43b32;
+}
+.bro-baccarat__card b {
+  position: absolute;
+  left: 9px;
+  top: 7px;
+}
+.bro-baccarat__card em {
+  font-style: normal;
+  font-size: 27px;
+}
+.bro-baccarat__card small {
+  position: absolute;
+  right: 9px;
+  bottom: 7px;
+  transform: rotate(180deg);
+  font:
+    700 15px Georgia,
+    serif;
+}
+.bro-baccarat__card.is-dealing {
+  animation: bro-card-deal 0.52s ease both;
+}
+.bro-baccarat__hand:nth-child(3) .bro-baccarat__card.is-dealing {
+  animation-delay: 0.12s;
+}
+.bro-baccarat__card.is-face-down {
+  border: 3px solid #f8f4e8;
+  background: #781e28;
+  color: rgba(255, 238, 196, 0.72);
+  font: 800 10px var(--bro-font-mono);
+  letter-spacing: 0.15em;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 229, 157, 0.38),
+    0 10px 22px rgba(67, 55, 34, 0.14);
+}
+.bro-baccarat__result {
+  text-align: center;
+  min-height: 24px;
+  margin: 24px 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.bro-baccarat__result.is-reward {
+  color: #8c6812;
+  animation: bro-baccarat-win 0.5s var(--bro-ease-out);
+}
+.bro-baccarat__result.is-loss {
+  color: var(--bro-danger);
+}
+
+.bro-baccarat__betting-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 38px;
+  margin: -8px auto 12px;
+}
+
+.bro-baccarat__betting-clock small {
+  color: var(--bro-fg-muted);
+  font: 650 9px var(--bro-font-mono);
+  letter-spacing: 0.06em;
+}
+
+.bro-baccarat__reward-pop {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.bro-baccarat__table-bets {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -6px auto 13px;
+}
+.bro-baccarat__table-bets span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 6px 5px 10px;
+  border: 1px solid rgba(128, 110, 75, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  color: var(--bro-fg-muted);
+}
+.bro-baccarat__table-bets b {
+  color: var(--bro-fg-secondary);
+}
+.bro-baccarat__table-bets i {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #496d99;
+  color: white;
+  font: 800 10px var(--bro-font-mono);
+  font-style: normal;
+}
+.bro-baccarat__table-bets i[data-side="庄"] {
+  background: #a34d43;
+}
+.bro-baccarat__table-bets i[data-side="和"] {
+  background: #4d8060;
+}
+.bro-baccarat__road {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto 13px;
+  font:
+    600 9px ui-monospace,
+    monospace;
+  color: #8a7d68;
+}
+.bro-baccarat__road > span {
+  margin-right: 4px;
+  letter-spacing: 1px;
+}
+.bro-baccarat__road i {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(112, 93, 60, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.44);
+  font-style: normal;
+  font-size: 8px;
+}
+.bro-baccarat__road i[data-side="庄"] {
+  color: #ad443a;
+  border-color: rgba(173, 68, 58, 0.38);
+}
+.bro-baccarat__road i[data-side="闲"] {
+  color: #456f9e;
+  border-color: rgba(69, 111, 158, 0.38);
+}
+.bro-baccarat__road i[data-side="和"] {
+  color: #48805a;
+  border-color: rgba(72, 128, 90, 0.38);
+}
+.bro-baccarat__bets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: none;
+  margin: auto;
+}
+.bro-baccarat__betting-console {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 14px;
+  border: 1px solid rgba(128, 110, 75, 0.18);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.84),
+    0 14px 35px rgba(64, 49, 25, 0.1);
+  backdrop-filter: blur(16px);
+}
+.bro-baccarat__action-error {
+  margin: 10px 0 0;
+  color: #b94435;
+  font-size: 12px;
+  text-align: center;
+}
+.bro-baccarat__odds-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: none;
+  margin: 0 auto 9px;
+  font-size: 10px;
+  color: var(--bro-fg-muted);
+}
+.bro-baccarat__odds-note strong {
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--bro-accent) 38%, transparent);
+  border-radius: 999px;
+  color: var(--bro-accent);
+  font: 700 9px var(--bro-font-mono);
+  letter-spacing: 0.08em;
+}
+.bro-baccarat__bets button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  min-height: 76px;
+  padding: 12px 17px;
+  border: 1px solid rgba(128, 110, 75, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.78),
+    rgba(241, 236, 225, 0.68)
+  );
+  cursor: pointer;
+  transition: 0.2s;
+}
+.bro-baccarat__placed-chip {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  z-index: 3;
+  right: 8px;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border: 3px dashed rgba(255, 255, 255, 0.78);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--bro-accent), #7f5c15);
+  box-shadow:
+    0 6px 12px rgba(64, 44, 8, 0.24),
+    inset 0 0 0 2px rgba(42, 29, 7, 0.25);
+  color: white;
+  font: 800 10px var(--bro-font-mono);
+  transform: translateY(-50%) rotate(-7deg);
+}
+.bro-baccarat__table.is-dealing .bro-baccarat__placed-chip,
+.bro-baccarat__table.is-betting-locked .bro-baccarat__placed-chip {
+  animation: bro-baccarat-chip-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.bro-baccarat__bets button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+.bro-baccarat__bets button:hover,
+.bro-baccarat__bets button.is-active {
+  border-color: var(--bro-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(112, 88, 32, 0.1);
+}
+.bro-baccarat__bets button.is-active[data-side="闲"] {
+  border-color: #557da8;
+  box-shadow: 0 10px 25px rgba(60, 98, 141, 0.16);
+}
+.bro-baccarat__bets button.is-active[data-side="庄"] {
+  border-color: #ad5a4f;
+  box-shadow: 0 10px 25px rgba(157, 68, 57, 0.14);
+}
+.bro-baccarat__bets button.is-active[data-side="和"] {
+  border-color: #538267;
+  box-shadow: 0 10px 25px rgba(66, 125, 87, 0.14);
+}
+.bro-baccarat__bets span {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+}
+.bro-baccarat__bets strong {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  color: var(--bro-fg-primary);
+  font: 800 17px var(--bro-font-mono);
+}
+.bro-baccarat__bets small {
+  grid-column: 1;
+  font-size: 10px;
+  color: var(--bro-fg-muted);
+  text-align: left;
+}
+.bro-baccarat__stake {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.bro-baccarat__stake > span {
+  margin-right: 3px;
+  font:
+    600 10px ui-monospace,
+    monospace;
+  letter-spacing: 0.1em;
+  color: var(--bro-fg-muted);
+}
+.bro-baccarat__stake button {
+  min-width: 46px;
+  min-height: 44px;
+  border: 1px solid rgba(128, 110, 75, 0.24);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #fffdf7, #ded4bf);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.45),
+    0 5px 11px rgba(69, 55, 31, 0.12);
+  color: var(--bro-fg-primary);
+  font:
+    700 12px ui-monospace,
+    monospace;
+  cursor: pointer;
+}
+.bro-baccarat__stake button.is-active {
+  border-color: var(--bro-accent);
+  background: var(--bro-accent);
+  color: var(--bro-bg-base);
+  transform: translateY(-2px);
+}
+.bro-baccarat__stake button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.bro-baccarat__bets button:focus-visible,
+.bro-baccarat__stake button:focus-visible,
+.bro-game-primary:focus-visible {
+  outline: 3px solid var(--bro-accent);
+  outline-offset: 2px;
+}
+.bro-game-primary {
+  display: block;
+  width: min(320px, 100%);
+  min-height: 44px;
+  margin: 16px auto 0;
+  padding: 0 28px;
+  border-radius: 12px;
+  background: var(--bro-accent);
+  color: var(--bro-bg-base);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(130, 98, 24, 0.18);
+  transition:
+    transform 0.18s,
+    box-shadow 0.18s;
+}
+.bro-game-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(130, 98, 24, 0.24);
+}
+.bro-game-primary:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.bro-baccarat__history {
+  max-width: 720px;
+  margin: 22px auto 0;
+  padding: 14px;
+  border: 1px solid rgba(128, 110, 75, 0.17);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.34);
+}
+.bro-baccarat__history-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px 9px;
+  font:
+    600 9px ui-monospace,
+    monospace;
+  letter-spacing: 0.12em;
+  color: var(--bro-fg-muted);
+}
+.bro-baccarat__history-head strong {
+  letter-spacing: 0;
+  color: var(--bro-fg-secondary);
+}
+.bro-baccarat__history ol {
+  display: grid;
+  gap: 5px;
+  max-height: 184px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+.bro-baccarat__history li {
+  display: grid;
+  grid-template-columns: 42px minmax(90px, 1fr) 56px 48px 76px;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 9px;
+  border-left: 2px solid var(--bro-border);
+  background: color-mix(in srgb, var(--bro-bg-raised) 58%, transparent);
+  font:
+    11px ui-monospace,
+    monospace;
+  color: var(--bro-fg-secondary);
+}
+.bro-baccarat__history li[data-net="1"] {
+  border-left-color: var(--bro-success);
+}
+.bro-baccarat__history li[data-net="-1"] {
+  border-left-color: var(--bro-danger);
+}
+.bro-baccarat__history li em {
+  font-style: normal;
+}
+.bro-baccarat__history li strong {
+  color: var(--bro-fg-primary);
+  text-align: right;
+}
+.bro-baccarat__history li[data-net="1"] strong {
+  color: var(--bro-success);
+}
+.bro-baccarat__history li[data-net="-1"] strong {
+  color: var(--bro-danger);
+}
+.bro-baccarat__history li small {
+  text-align: right;
+  color: var(--bro-fg-muted);
+}
+.bro-baccarat__history li.is-empty {
+  display: flex;
+  justify-content: center;
+  border-left: 0;
+  color: var(--bro-fg-muted);
+}
+.dark .bro-baccarat__table {
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(224, 184, 74, 0.025) 0 1px,
+      transparent 1px 4px
+    ),
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(224, 184, 74, 0.08),
+      transparent 35%
+    ),
+    var(--bro-bg-base);
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.42),
+    0 18px 55px rgba(0, 0, 0, 0.2);
+  border-color: var(--bro-border);
+}
+.dark .bro-baccarat__feltline {
+  border-radius: 12px;
+  border-style: dashed;
+}
+.dark .bro-baccarat__card {
+  border-radius: 4px;
+  background: var(--bro-bg-elevated);
+  color: var(--bro-accent);
+  box-shadow: none;
+  font-family: ui-monospace, monospace;
+}
+.dark .bro-baccarat__card.is-face-down {
+  border-color: #25251e;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(224, 184, 74, 0.08) 0 3px,
+      transparent 3px 7px
+    ),
+    #12140f;
+  color: var(--bro-accent);
+}
+.dark .bro-baccarat__dealer-head {
+  filter: grayscale(0.7);
+  box-shadow: 0 0 14px rgba(224, 184, 74, 0.12);
+}
+.dark .bro-baccarat__dealer-body {
+  background: linear-gradient(130deg, #25251e, #080808);
+}
+.dark .bro-baccarat__dealer i,
+.dark .bro-baccarat__hand > span {
+  color: var(--bro-accent);
+}
+.dark .bro-baccarat__shoe {
+  background: #111;
+  border-color: var(--bro-border);
+  box-shadow: 0 0 22px rgba(224, 184, 74, 0.08);
+}
+.dark .bro-baccarat__seats span {
+  background: #111;
+  border-color: #3d3a2d;
+  color: #8f896e;
+}
+.dark .bro-baccarat__seats span.is-you {
+  border-color: var(--bro-accent);
+  color: var(--bro-accent);
+  box-shadow: 0 0 14px rgba(224, 184, 74, 0.18);
+}
+.dark .bro-baccarat__road i {
+  background: #0c0d0b;
+  border-radius: 50%;
+}
+.dark .bro-baccarat__bets button,
+.dark .bro-game-pot {
+  border-radius: 4px;
+  background: transparent;
+  font-family: ui-monospace, monospace;
+}
+.dark .bro-baccarat__stake button {
+  border-radius: 3px;
+  background: #0b0d0b;
+  box-shadow: none;
+  color: var(--bro-accent);
+}
+.dark .bro-baccarat__stake button.is-active {
+  background: var(--bro-accent);
+  color: var(--bro-bg-base);
+}
+.dark .bro-baccarat__history {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.24);
+  font-family: ui-monospace, monospace;
+}
+.dark .bro-baccarat__betting-console {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.38);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.dark .bro-baccarat__table-bets span {
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.38);
+}
+.dark .bro-baccarat__bets button.is-active {
+  background: var(--bro-accent);
+  color: var(--bro-bg-base);
+  box-shadow: none;
+}
+.dark .bro-game-primary {
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+}
+@keyframes bro-baccarat-win {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.3;
+  }
+  65% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes bro-card-deal {
+  from {
+    transform: translate(92px, -96px) rotate(-18deg) scale(0.82);
+    opacity: 0;
+  }
+  to {
+    transform: var(--card-rest, rotate(-4deg));
+    opacity: 1;
+  }
+}
+@keyframes bro-dealer-arm {
+  from {
+    transform: rotate(-12deg) translateY(0);
+  }
+  to {
+    transform: rotate(52deg) translateY(12px);
+  }
+}
+@keyframes bro-baccarat-shoe {
+  to {
+    transform: skew(-8deg) translateX(-3px);
+    box-shadow: 0 10px 24px rgba(146, 105, 24, 0.24);
+  }
+}
+@keyframes bro-baccarat-chip-in {
+  from {
+    opacity: 0;
+    transform: translate(0, 75px) rotate(70deg) scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) rotate(-7deg) scale(1);
+  }
+}
+@keyframes bro-baccarat-table-win {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (max-width: 640px) {
+  .bro-game-shell {
+    padding: 16px;
+  }
+  .bro-game-hero {
+    align-items: start;
+  }
+  .bro-game-pot {
+    display: none;
+  }
+  .bro-baccarat__table {
+    min-height: 680px;
+    padding: 122px 14px 26px;
+  }
+  .bro-baccarat__card {
+    width: 61px;
+    height: 92px;
+  }
+  .bro-baccarat__cards {
+    min-height: 100px;
+  }
+  .bro-baccarat__seats span:nth-child(2),
+  .bro-baccarat__seats span:nth-child(5) {
+    display: none;
+  }
+  .bro-baccarat__shoe {
+    right: 3%;
+  }
+  .bro-baccarat__road i:nth-of-type(-n + 2) {
+    display: none;
+  }
+  .bro-baccarat__bets {
+    gap: 6px;
+  }
+  .bro-baccarat__bets button {
+    min-height: 72px;
+    padding: 10px;
+  }
+  .bro-baccarat__bets strong {
+    font-size: 13px;
+  }
+  .bro-baccarat__placed-chip {
+    right: 50%;
+    top: auto;
+    bottom: -8px;
+    width: 29px;
+    height: 29px;
+    transform: translateX(50%) rotate(-7deg);
+  }
+  .bro-baccarat__history li {
+    grid-template-columns: 34px minmax(76px, 1fr) 46px 38px;
+  }
+  .bro-baccarat__history li small {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bro-baccarat__card.is-dealing,
+  .bro-baccarat__result.is-reward,
+  .bro-baccarat__table.is-dealing .bro-baccarat__dealer-body::before,
+  .bro-baccarat__table.is-dealing .bro-baccarat__shoe,
+  .bro-baccarat__table.is-dealing .bro-baccarat__placed-chip,
+  .bro-baccarat__table.is-win::after {
+    animation: none;
+  }
+  .bro-game-primary {
+    transition: none;
+  }
+  .bro-baccarat__stake button,
+  .bro-baccarat__bets button {
+    transition: none;
+  }
+}

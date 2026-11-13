@@ -1,0 +1,169 @@
+
+
+/* ============================================================
+   玻璃三层结构：半透明基底 + 厚度边 + 折射阴影
+   缺任一则塑料感
+   ============================================================ */
+
+.bro-glass {
+  background: var(--bro-glass-bg);
+  backdrop-filter: blur(var(--bro-glass-blur))
+    saturate(var(--bro-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--bro-glass-blur))
+    saturate(var(--bro-glass-saturate));
+
+  /* 上缘高光 + 下缘暗边 = 厚度感 */
+  border: 1px solid var(--bro-glass-border);
+  border-bottom-color: var(--bro-glass-edge);
+
+  box-shadow: var(--bro-shadow-glass);
+  border-radius: var(--bro-radius-lg);
+}
+
+/* 夜间不是深色玻璃，而是终端面板：单线框、直角、零模糊。 */
+:root.dark .bro-glass,
+:root[data-theme="dark"] .bro-glass {
+  border-radius: 4px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: inset 0 0 0 1px rgba(108, 240, 154, 0.025);
+}
+
+/* ------------------------------------------------------------
+   玻璃层级。最多叠加 3 层，超过改用实色 --bro-bg-raised
+   ------------------------------------------------------------ */
+
+/* L1 底层：侧边栏、顶栏。贴边故无圆角 */
+.bro-glass-l1 {
+  --bro-glass-blur: 20px;
+  border-radius: 0;
+}
+
+/* L2 卡片：内容卡片、面板 */
+.bro-glass-l2 {
+  --bro-glass-blur: 16px;
+}
+
+/* L3 浮层：弹窗、下拉、Toast。不透明度更高以保证可读性 */
+.bro-glass-l3 {
+  --bro-glass-blur: 24px;
+  background: var(--bro-glass-bg-heavy);
+  border-radius: var(--bro-radius-xl);
+}
+
+/* ============================================================
+   可读性铁律（§2.3）
+
+   玻璃上背后内容不可控 → 用 --bro-glass-bg-heavy
+   玻璃上的关键信息      → 必须垫实色底
+   玻璃上的正文段落      → 禁止，改用实色卡片
+   ============================================================ */
+
+/* 额度、积分、成本等关键数字必须垫实色底，否则对比度不可控 */
+.bro-glass-critical-text {
+  background: var(--bro-bg-raised);
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+/* 长文本、数据表格、代码块用实色，可读性优先于材质 */
+.bro-surface-solid {
+  background: var(--bro-bg-raised);
+  border: 1px solid var(--bro-border);
+  border-radius: var(--bro-radius-lg);
+}
+
+/* ============================================================
+   性能护栏（§2.4）
+
+   backdrop-filter 昂贵，液态玻璃性能评级为 Moderate-Poor。
+   硬性约束：同屏 ≤ 8 个；滚动容器内禁用；游戏对局界面全程禁用。
+   ============================================================ */
+
+/* 滚动容器内的玻璃每帧重算必掉帧，一律降级为实色 */
+.bro-scroll-container .bro-glass,
+.bro-scroll-container .bro-glass-l1,
+.bro-scroll-container .bro-glass-l2,
+.bro-scroll-container .bro-glass-l3 {
+  background: var(--bro-bg-raised);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* 游戏对局界面帧率优先，全程禁用玻璃 */
+.bro-game-viewport .bro-glass,
+.bro-game-viewport .bro-glass-l1,
+.bro-game-viewport .bro-glass-l2,
+.bro-game-viewport .bro-glass-l3 {
+  background: var(--bro-bg-raised);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* 低性能设备降级：检测到掉帧时由 JS 挂载此属性 */
+:root[data-bro-glass="off"] .bro-glass,
+:root[data-bro-glass="off"] .bro-glass-l1,
+:root[data-bro-glass="off"] .bro-glass-l2,
+:root[data-bro-glass="off"] .bro-glass-l3 {
+  background: var(--bro-bg-raised);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bro-glass,
+  .bro-glass-l1,
+  .bro-glass-l2,
+  .bro-glass-l3 {
+    background: var(--bro-bg-raised);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ============================================================
+   液态感来源（§5.3）
+
+   体现在状态过渡的连续性，不是随机流体动画。
+   不做 iridescent / 色相旋转 / 装饰性形变——那是 branding 展示页
+   手法，用在长时间驻留的生产力工具上会显廉价。
+   ============================================================ */
+
+/* 卡片 hover 抬升 */
+.bro-glass-interactive {
+  transition:
+    transform var(--bro-duration-state) var(--bro-ease-out),
+    box-shadow var(--bro-duration-state) var(--bro-ease-out);
+}
+
+.bro-glass-interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* 按压反馈：模拟按下真实物体 */
+.bro-glass-interactive:active {
+  transform: scale(0.98);
+  transition-duration: var(--bro-duration-micro);
+}
+
+/* 主题切换时玻璃层与背景同步过渡，不闪切 */
+.bro-theme-transition,
+.bro-theme-transition * {
+  transition:
+    background-color var(--bro-duration-morph) var(--bro-ease-out),
+    border-color var(--bro-duration-morph) var(--bro-ease-out),
+    color var(--bro-duration-morph) var(--bro-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-glass-interactive,
+  .bro-theme-transition,
+  .bro-theme-transition * {
+    transition-duration: 0.01ms !important;
+  }
+
+  .bro-glass-interactive:hover {
+    transform: none;
+  }
+}

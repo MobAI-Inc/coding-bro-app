@@ -1,0 +1,18 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Minimal permissions for the Codex launcher and account session",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "dialog:allow-open",
+    "store:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        { "url": "https://checkout.stripe.com/*" },
+        { "url": "https://billing.stripe.com/*" }
+      ]
+    }
+  ]
+}

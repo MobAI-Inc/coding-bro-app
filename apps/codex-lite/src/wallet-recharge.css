@@ -1,0 +1,88 @@
+.lite-wallet-recharge {
+  margin-bottom: 22px;
+  padding: 21px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.lite-wallet-recharge h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.lite-wallet-recharge p {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+.lite-wallet-recharge fieldset {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin: 18px 0;
+  padding: 0;
+  border: 0;
+}
+.lite-wallet-recharge legend {
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.lite-wallet-recharge label {
+  position: relative;
+  cursor: pointer;
+}
+.lite-wallet-recharge input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.lite-wallet-recharge label span {
+  display: grid;
+  place-items: center;
+  min-height: 39px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+}
+.lite-wallet-recharge input:checked + span {
+  border-color: var(--green);
+  background: var(--green-soft);
+  color: var(--green);
+}
+.lite-wallet-recharge input:focus-visible + span {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+.lite-wallet-recharge fieldset:disabled label {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.lite-wallet-recharge__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.lite-wallet-recharge__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.lite-wallet-recharge__actions button:first-child {
+  border-color: var(--green);
+  background: var(--green);
+  color: white;
+}
+.lite-wallet-recharge__actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.lite-wallet-recharge [role="alert"] {
+  color: #b64237;
+}

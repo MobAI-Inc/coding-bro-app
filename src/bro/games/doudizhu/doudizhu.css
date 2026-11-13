@@ -1,0 +1,444 @@
+/**
+ * 斗地主对局界面样式。
+ *
+ * 亮暗两套共用同一份布局，只有牌桌区的渲染方式不同（Canvas / 字符格子）。
+ * 牌桌容器带 `.bro-game-viewport`，玻璃护栏会据此关掉该区域内的模糊与投影
+ * ——对局区帧率优先，护栏由 tests/themes/tokens.test.ts 强制。
+ *
+ * 本文件不使用 `backdrop-filter`：整个对局区都在玻璃护栏的关闭范围内，写了
+ * 也会被覆盖，只会白白占掉单视图 8 处的性能预算（UI-DESIGN.md §2.4）。
+ */
+
+.bro-doudizhu {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 32px);
+  align-items: start;
+  padding: clamp(16px, 2.4vw, 32px);
+}
+
+/* 牌桌容器必须有确定高度：Canvas 渲染器按 clientWidth/clientHeight 算布局，
+   高度靠内容撑开就会拿到 0，什么都画不出来。 */
+.bro-doudizhu__table {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: min(100%, calc((100dvh - 270px) * 4 / 3));
+  max-width: 940px;
+  min-width: 0;
+  justify-self: center;
+  overflow: hidden;
+  border: 1px solid
+    color-mix(in srgb, var(--bro-border-strong) 80%, transparent);
+  border-radius: calc(var(--bro-radius-md) + 6px);
+  background: var(--bro-bg-sunken);
+  box-shadow: var(--bro-shadow-3);
+}
+
+.bro-doudizhu-canvas {
+  display: block;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.bro-doudizhu__panel {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 4;
+  place-self: start center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bro-space-3);
+  width: min(500px, calc(100% - 48px));
+  min-width: 0;
+  margin-top: 72px;
+  padding: 14px 16px;
+  border: 1px solid var(--bro-border);
+  border-radius: calc(var(--bro-radius-md) + 2px);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bro-bg-raised) 97%, transparent),
+    color-mix(in srgb, var(--bro-bg-base) 94%, transparent)
+  );
+  box-shadow:
+    var(--bro-shadow-3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.bro-doudizhu__hand-rail {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 3;
+  align-self: end;
+  width: min(calc(100% - 24px), calc((100dvh - 270px) * 4 / 3 - 24px), 916px);
+  justify-self: center;
+  min-width: 0;
+  margin-bottom: 12px;
+  padding: 12px 16px 16px;
+  border: 1px solid var(--bro-border);
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bro-bg-raised) 98%, transparent),
+    color-mix(in srgb, var(--bro-bg-sunken) 94%, transparent)
+  );
+  box-shadow: var(--bro-shadow-1);
+}
+
+.bro-doudizhu__hand-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  font-family: var(--bro-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--bro-fg-muted);
+}
+
+.bro-doudizhu__hand-head strong {
+  color: var(--bro-fg-secondary);
+}
+
+.bro-doudizhu__hand-cards {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 92px;
+  padding: 16px 5px 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.bro-doudizhu__hand-cards button {
+  position: relative;
+  flex: 0 0 clamp(44px, 5.1vw, 62px);
+  aspect-ratio: 7 / 10;
+  min-width: 44px;
+  min-height: 58px;
+  margin-left: clamp(-28px, -2.2vw, -14px);
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  box-shadow: 0 6px 12px rgba(26, 20, 12, 0.17);
+  cursor: pointer;
+  transition:
+    transform 150ms var(--bro-ease-out),
+    box-shadow 130ms ease;
+}
+
+.bro-doudizhu__hand-cards button:first-child {
+  margin-left: 0;
+}
+
+.bro-doudizhu__hand-cards img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 176%;
+  max-width: none;
+  height: auto;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  image-rendering: pixelated;
+}
+
+.bro-doudizhu__hand-cards button:hover {
+  z-index: 2;
+  transform: translateY(-6px);
+}
+
+.bro-doudizhu__hand-cards button.is-selected {
+  z-index: 3;
+  transform: translateY(-14px);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--bro-warning) 72%, transparent),
+    0 10px 18px rgba(26, 20, 12, 0.24);
+}
+
+.bro-doudizhu__hand-cards button:focus-visible {
+  z-index: 4;
+  outline: 3px solid var(--bro-accent);
+  outline-offset: 2px;
+}
+
+.bro-doudizhu__status {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--bro-fg-primary);
+}
+
+.bro-doudizhu__meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bro-fg-muted);
+  font-family: var(--bro-font-mono);
+  letter-spacing: -0.03em;
+}
+
+.bro-doudizhu__hint {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 2px solid var(--bro-warning);
+  border-radius: 0 var(--bro-radius-sm) var(--bro-radius-sm) 0;
+  background: color-mix(in srgb, var(--bro-warning) 9%, transparent);
+  font-size: 13px;
+  color: var(--bro-warning);
+}
+
+.bro-doudizhu__bot-note {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 2px solid var(--bro-accent);
+  background: color-mix(in srgb, var(--bro-accent) 8%, transparent);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--bro-fg-secondary);
+}
+
+.bro-doudizhu__reject {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 2px solid var(--bro-danger);
+  border-radius: 0 var(--bro-radius-sm) var(--bro-radius-sm) 0;
+  background: color-mix(in srgb, var(--bro-danger) 9%, transparent);
+  font-size: 13px;
+  color: var(--bro-danger);
+}
+
+.bro-doudizhu__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: var(--bro-space-2);
+  padding-top: var(--bro-space-1);
+}
+
+.bro-doudizhu__button {
+  min-height: 36px;
+  padding: 0 var(--bro-space-3);
+  border: 1px solid var(--bro-border);
+  border-radius: var(--bro-radius-sm);
+  background: var(--bro-bg-raised);
+  color: var(--bro-fg-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    var(--bro-shadow-1);
+  transition:
+    transform 160ms var(--bro-ease-out),
+    border-color 160ms var(--bro-ease-out),
+    background 160ms var(--bro-ease-out);
+}
+
+.bro-doudizhu__button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--bro-border-strong);
+}
+
+.bro-doudizhu__button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.bro-doudizhu__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bro-doudizhu__button--primary {
+  border-color: var(--bro-accent);
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+  box-shadow:
+    0 5px 14px -8px var(--bro-accent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.bro-doudizhu__button:focus-visible {
+  outline: 2px solid var(--bro-accent);
+  outline-offset: 2px;
+}
+
+/* 暗色保留完整图形牌局，外壳只切入 Coding 夜场的线框与荧光反馈。 */
+:root.dark .bro-doudizhu__table,
+:root[data-theme="dark"] .bro-doudizhu__table {
+  border-color: rgba(108, 240, 154, 0.38);
+  box-shadow:
+    0 0 0 1px rgba(108, 240, 154, 0.06),
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+}
+
+:root.dark .bro-doudizhu__panel,
+:root[data-theme="dark"] .bro-doudizhu__panel {
+  border-color: rgba(108, 240, 154, 0.2);
+  background: linear-gradient(145deg, #0a130d, #050806);
+  box-shadow:
+    inset 0 1px 0 rgba(108, 240, 154, 0.1),
+    var(--bro-shadow-1);
+}
+
+:root.dark .bro-doudizhu__hand-rail,
+:root[data-theme="dark"] .bro-doudizhu__hand-rail {
+  border-color: rgba(108, 240, 154, 0.2);
+  border-radius: 4px;
+  background: #040805;
+}
+
+:root.dark .bro-doudizhu__status::before,
+:root[data-theme="dark"] .bro-doudizhu__status::before {
+  content: "> ";
+  color: var(--bro-accent);
+  font-family: var(--bro-font-mono);
+}
+
+:root.dark .bro-doudizhu__button,
+:root[data-theme="dark"] .bro-doudizhu__button {
+  border-radius: 4px;
+  background: #07100a;
+  box-shadow: none;
+  font-family: var(--bro-font-mono);
+  font-size: 13px;
+}
+
+:root.dark .bro-doudizhu__button--primary,
+:root[data-theme="dark"] .bro-doudizhu__button--primary {
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+  box-shadow: 0 0 16px -8px var(--bro-accent);
+}
+
+@media (max-width: 760px) {
+  .bro-doudizhu {
+    grid-template-columns: 1fr;
+    gap: var(--bro-space-3);
+    padding: var(--bro-space-3);
+  }
+
+  .bro-doudizhu__table {
+    max-width: none;
+  }
+
+  .bro-doudizhu__panel {
+    padding: 14px;
+  }
+
+  .bro-doudizhu__hand-rail {
+    grid-column: 1;
+    padding-inline: 10px;
+  }
+
+  .bro-doudizhu__hand-cards {
+    justify-content: flex-start;
+  }
+
+  .bro-doudizhu__hand-cards button {
+    flex-basis: 52px;
+    margin-left: -10px;
+  }
+
+  .bro-doudizhu__actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bro-doudizhu__button {
+    padding: 0 var(--bro-space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-doudizhu__button,
+  .bro-doudizhu__hand-cards button,
+  .bro-doudizhu-tui__card {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TUI 牌桌（暗色模式）
+   ============================================================ */
+
+.bro-doudizhu-tui {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bro-space-3);
+  /* 键盘操作的落点，必须有可见焦点环——TUI 模式全靠键盘 */
+  outline-offset: 4px;
+}
+
+.bro-doudizhu-tui:focus-visible {
+  outline: 2px solid var(--bro-accent);
+}
+
+.bro-doudizhu-tui__seats,
+.bro-doudizhu-tui__table {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bro-fg-secondary);
+}
+
+.bro-doudizhu-tui__hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bro-space-1);
+}
+
+/*
+ * 一张牌一个定宽格子。
+ *
+ * 这是整份样式里最要紧的一条：`♠♥♦♣` 属 East Asian Width Ambiguous、
+ * `小王` 是全宽，同一串牌在不同字体下宽度不一样。若靠字符本身排版，牌与
+ * 牌之间会错位，光标看着压在这张牌上、实际选中的是另一张。宽度写死在
+ * 格子上，列宽就与字符宽度无关。
+ *
+ * 改这里前先读 src/bro/lobby/catalog.ts 里的同一段教训。
+ */
+.bro-doudizhu-tui__card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 3.5em;
+  padding: var(--bro-space-1) 0;
+  border: 1px solid var(--bro-border);
+  font-family: var(--bro-font-mono);
+  font-size: 14px;
+  color: var(--bro-fg-primary);
+  /* 牌面字符宽度不一（"10" 比 "3" 宽、"小王" 是两个全宽字），
+     超出的部分裁掉也不能把格子撑开 */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* 选中：抬起 + 反色。抬起是位移不是尺寸变化，不会引起重排 */
+.bro-doudizhu-tui__card.is-selected {
+  border-color: var(--bro-accent);
+  background: var(--bro-accent-subtle);
+  transform: translateY(-4px);
+}
+
+/* 光标：靠底色标记而非替换字符，压在牌上时仍看得清那是哪张牌 */
+.bro-doudizhu-tui__card.is-cursor {
+  border-color: var(--bro-accent);
+  color: var(--bro-accent);
+}
+
+.bro-doudizhu-tui__card.is-cursor.is-selected {
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+}
+
+.bro-doudizhu-tui__status {
+  font-family: var(--bro-font-mono);
+  font-size: 12px;
+  color: var(--bro-fg-muted);
+}

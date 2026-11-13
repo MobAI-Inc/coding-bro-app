@@ -1,0 +1,630 @@
+@import url("./tokens.css");
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font:
+    14px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #91baa8;
+  outline-offset: 3px;
+}
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+svg {
+  flex-shrink: 0;
+}
+.lite-shell {
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+.lite-header {
+  height: 68px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.lite-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.lite-brand strong {
+  font-size: 17px;
+  letter-spacing: -0.5px;
+}
+.lite-brand strong span {
+  color: var(--green);
+  margin-left: 3px;
+  font-weight: 500;
+}
+.lite-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--green);
+  color: white;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+}
+.lite-header nav {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+.lite-header nav button {
+  padding: 8px 15px;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 7px;
+}
+.lite-header nav button.is-active {
+  background: var(--green-soft);
+  color: var(--green);
+  font-weight: 600;
+}
+.lite-icon-button {
+  background: transparent;
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+}
+.lite-content {
+  width: 100%;
+  max-width: 850px;
+  padding: 28px 32px 32px;
+  margin: 0 auto;
+  flex: 1;
+}
+.lite-heading {
+  margin-bottom: 24px;
+}
+.lite-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  color: var(--muted);
+}
+.lite-heading h1 {
+  font-size: 29px;
+  letter-spacing: -1px;
+  line-height: 1.35;
+  font-weight: 650;
+  margin: 10px 0 9px;
+}
+.lite-heading p {
+  color: var(--muted);
+  font-size: 13px;
+}
+.lite-workspace {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 5px 20px #1c352807;
+}
+.lite-workspace-top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.lite-agent-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--green-soft);
+  color: var(--green);
+}
+.lite-workspace-top h2 {
+  font-size: 19px;
+  font-weight: 650;
+}
+.lite-workspace-top p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.lite-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+}
+.lite-status i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #a5aaa4;
+}
+.lite-status.is-ready {
+  color: var(--green);
+}
+.lite-status.is-ready i {
+  background: var(--green);
+}
+.lite-field {
+  margin-bottom: 18px;
+}
+.lite-field label,
+.lite-auth label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.lite-project {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  padding: 14px;
+  border-radius: 8px;
+  width: 100%;
+  text-align: left;
+  gap: 12px;
+  color: var(--ink);
+  justify-content: flex-start;
+}
+.lite-project > svg:first-child {
+  color: var(--green);
+}
+.lite-project > svg:last-child {
+  margin-left: auto;
+  color: var(--muted);
+}
+.lite-project span {
+  min-width: 0;
+}
+.lite-project strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 550;
+}
+.lite-project small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lite-select {
+  position: relative;
+}
+.lite-select select {
+  appearance: none;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  height: 43px;
+  padding: 0 36px 0 13px;
+}
+.lite-select svg {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  pointer-events: none;
+  color: var(--muted);
+}
+.lite-field-note {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 8px;
+}
+.lite-signin-hint {
+  width: 100%;
+  justify-content: flex-start;
+  background: var(--green-soft);
+  color: var(--green);
+  padding: 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+.lite-signin-hint svg:last-child {
+  margin-left: auto;
+}
+.lite-primary {
+  background: var(--green);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 0 20px;
+}
+.lite-launch {
+  width: 100%;
+  margin-top: 3px;
+}
+.lite-secondary {
+  background: var(--canvas);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 13px;
+  font-size: 12px;
+}
+.lite-subtle {
+  color: var(--muted);
+  background: transparent;
+  font-size: 12px;
+  padding: 8px 0;
+}
+.lite-overview {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 24px;
+  padding: 0 4px;
+}
+.lite-overview > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.lite-overview span {
+  display: block;
+  font-size: 10px;
+}
+.lite-overview strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 550;
+}
+.lite-overview > button {
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  margin-left: auto;
+}
+.lite-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  padding: 18px 42px;
+  border-top: 1px solid var(--line);
+}
+.lite-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  border: 1px solid #bcd5c7;
+  color: var(--green);
+  background: #ecf5ef;
+  border-radius: 7px;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+.lite-message.is-error {
+  color: #8a3933;
+  background: #fff2ef;
+  border-color: #f1ccc5;
+}
+.lite-message button {
+  margin-left: auto;
+  background: transparent;
+  color: inherit;
+  font-size: 19px;
+}
+.lite-loading {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  margin: 0 0 22px;
+  font-size: 12px;
+}
+.lite-install {
+  background: var(--canvas);
+  border-radius: 7px;
+  padding: 13px;
+  margin: 5px 0 15px;
+  font-size: 12px;
+}
+details.lite-install > summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+}
+details.lite-install[open] > summary {
+  margin-bottom: 12px;
+}
+.lite-install strong {
+  font-weight: 600;
+  display: block;
+}
+.lite-install code {
+  display: block;
+  padding: 9px 0;
+  color: var(--green);
+  font-size: 12px;
+  user-select: all;
+}
+.lite-install p {
+  color: var(--muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.lite-auth {
+  max-width: 410px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 24px;
+  border-radius: 12px;
+}
+.lite-auth-mode {
+  display: flex;
+  padding: 3px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  margin-bottom: 24px;
+}
+.lite-auth-mode button {
+  flex: 1;
+  background: transparent;
+  padding: 7px;
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.lite-auth-mode button.is-active {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 1px 3px #00000010;
+}
+.lite-auth label {
+  margin-bottom: 18px;
+}
+.lite-auth input {
+  display: block;
+  width: 100%;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0 11px;
+  margin-top: 7px;
+}
+.lite-auth .lite-primary {
+  width: 100%;
+  margin-top: 5px;
+}
+.lite-account-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 24px;
+}
+.lite-avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 17px;
+}
+.lite-account-identity h2 {
+  font-size: 15px;
+}
+.lite-account-identity p {
+  font-size: 11px;
+  color: var(--muted);
+}
+.lite-account-identity > button {
+  margin-left: auto;
+}
+.lite-balance {
+  border-radius: 12px;
+  background: var(--green);
+  color: white;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.lite-balance .lite-eyebrow {
+  color: #cce3d6;
+}
+.lite-balance h2 {
+  font-size: 30px;
+  margin: 6px 0;
+  font-weight: 550;
+}
+.lite-balance p {
+  font-size: 11px;
+  color: #cce3d6;
+}
+.lite-balance > svg {
+  opacity: 0.45;
+}
+.lite-subscription {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 21px 24px;
+  margin-bottom: 30px;
+}
+.lite-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.lite-section-title h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.lite-section-title > span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.lite-subscription > strong {
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 7px;
+}
+.lite-subscription > p {
+  font-size: 11px;
+  color: var(--muted);
+}
+.lite-subscription .lite-billing-note {
+  padding-top: 13px;
+  margin-top: 13px;
+  border-top: 1px solid var(--line);
+  line-height: 1.8;
+}
+.lite-plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+.lite-plans section {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 15px;
+}
+.lite-plans h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.lite-plans strong {
+  font-size: 23px;
+  font-weight: 550;
+}
+.lite-plans small {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.lite-plans p {
+  color: var(--muted);
+  font-size: 10px;
+  margin: 8px 0 19px;
+}
+.lite-plans button {
+  width: 100%;
+  font-size: 10px;
+  padding: 10px 3px;
+  gap: 4px;
+}
+.is-spinning {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-spinning {
+    animation: none;
+  }
+}
+@media (max-width: 650px) {
+  .lite-header {
+    padding: 0 20px;
+    gap: 12px;
+  }
+  .lite-brand strong {
+    font-size: 14px;
+  }
+  .lite-header nav button {
+    padding: 8px 10px;
+  }
+  .lite-content {
+    padding: 29px 20px;
+  }
+  .lite-heading h1 {
+    font-size: 25px;
+  }
+  .lite-workspace {
+    padding: 20px;
+  }
+  .lite-workspace-top p {
+    font-size: 10px;
+  }
+  .lite-status {
+    font-size: 10px;
+  }
+  .lite-overview {
+    gap: 17px;
+  }
+  .lite-footer {
+    padding: 17px 20px;
+  }
+  .lite-footer span:nth-child(2) {
+    display: none;
+  }
+  .lite-plans {
+    grid-template-columns: 1fr;
+  }
+}

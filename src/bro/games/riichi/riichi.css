@@ -1,0 +1,124 @@
+/**
+ * 立直麻将对局界面样式。
+ *
+ * 与其余五款同一套骨架：亮暗共用布局，只有牌桌区的渲染方式不同（Canvas /
+ * 字符屏）。牌桌容器带 `.bro-game-viewport`，玻璃护栏据此关掉该区域内的模糊与
+ * 投影 —— 对局区帧率优先，护栏由 tests/themes/tokens.test.ts 强制。
+ */
+
+.bro-riichi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 24px;
+  align-items: start;
+  padding: 24px;
+}
+
+/* 牌桌容器必须是确定尺寸：Canvas 渲染器按 clientWidth/clientHeight 算布局，
+   高度靠内容撑开就会拿到 0，什么都画不出来。四家对称所以取正方形。 */
+.bro-riichi__table {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 720px;
+  min-width: 0;
+}
+
+.bro-riichi-canvas {
+  display: block;
+  border-radius: 12px;
+  box-shadow: var(--bro-shadow-2);
+  user-select: none;
+  cursor: pointer;
+}
+
+.bro-riichi__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bro-riichi__status {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bro-fg-primary);
+  margin: 0;
+}
+
+.bro-riichi__meta {
+  font-size: 13px;
+  color: var(--bro-fg-muted);
+  margin: 0;
+}
+
+.bro-riichi__hint {
+  font-size: 12px;
+  color: var(--bro-fg-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.bro-riichi__reject {
+  font-size: 13px;
+  color: var(--bro-danger);
+  margin: 0;
+}
+
+/* 荣和 / 自摸 / 立直这几个按钮是一次性的重决策，摆在一起且足够大。
+   触摸目标 44px 是硬要求（UI-DESIGN.md，无障碍那一节）。 */
+.bro-riichi__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bro-riichi__action {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--bro-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--bro-fg-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bro-riichi__action:hover:not(:disabled) {
+  background: var(--bro-bg-sunken);
+}
+
+.bro-riichi__action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 立直不可撤销，用强调色与其余动作区分开 */
+.bro-riichi__action--riichi {
+  border-color: var(--bro-accent);
+  color: var(--bro-accent);
+}
+
+/* ============================================================
+   TUI 牌桌（暗色模式）
+   ============================================================ */
+
+.bro-riichi-tui {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  outline-offset: 4px;
+}
+
+.bro-riichi-tui:focus-visible {
+  outline: 2px solid var(--bro-accent);
+}
+
+.bro-riichi-tui__screen {
+  margin: 0;
+  font-size: clamp(9px, 1.05vw, 13px);
+  line-height: 1.3;
+  color: var(--bro-fg-secondary);
+  /* 牌用 `3m` / `东` 短记法。汉字是全角，强制比例宽度才不会把牌河挤歪 */
+  font-variant-east-asian: proportional-width;
+}

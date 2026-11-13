@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Coding Bro
+Comment=AI coding plans, points, resets, gateway access, and H5 games
+Exec=coding-bro
+Icon=com.codingbro.desktop
+Terminal=false
+Categories=Utility;Development;
+StartupNotify=true

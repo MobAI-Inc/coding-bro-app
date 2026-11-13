@@ -1,0 +1,179 @@
+
+
+/* ============================================================
+   亮色模式 — Cream + Liquid Glass
+   奶油白核心是暖调低饱和，不是灰白。基底带极微黄调，
+   长时间注视不疲劳，同时天然产生高级感而非廉价白。
+   ============================================================ */
+
+:root.light,
+:root[data-theme="light"] {
+  --bro-brand-porcelain: #f4f1eb;
+  --bro-brand-ink: #17140f;
+  --bro-brand-brass: #9b7630;
+  --bro-brand-phosphor: #72f2a1;
+  --bro-brand-signal: #e7ad3f;
+  /* 基底层 */
+  --bro-bg-base: #f4f1eb;
+  --bro-bg-sunken: #ebe6de;
+  --bro-bg-raised: #fffefa;
+  --bro-bg-elevated: #fffefa;
+
+  /* 玻璃层 */
+  --bro-glass-bg: rgba(255, 254, 250, 0.68);
+  --bro-glass-bg-heavy: rgba(255, 254, 250, 0.88);
+  --bro-glass-border: rgba(255, 255, 255, 0.92);
+  --bro-glass-edge: rgba(119, 104, 83, 0.16);
+  --bro-glass-blur: 24px;
+  /* saturate 是廉价玻璃与高级玻璃的分水岭：只做 blur 会让背景发灰显脏 */
+  --bro-glass-saturate: 180%;
+
+  /* 文字。括号内为对 --bro-bg-base 的实测对比度 */
+  --bro-fg-primary: #1c1917; /* 15.8:1 */
+  --bro-fg-secondary: #57534e; /* 7.2:1 */
+  --bro-fg-muted: #8b8378; /* 4.6:1 */
+  --bro-fg-on-accent: #ffffff;
+
+  /* 强调色。暖金与奶油白同色系，配冷蓝会色温冲突显廉价 */
+  --bro-accent: #9b7630;
+  --bro-accent-hover: #76571f;
+  --bro-accent-subtle: rgba(155, 118, 48, 0.12);
+
+  /* 语义色 */
+  --bro-success: #3f7d58;
+  --bro-warning: #b8862b;
+  --bro-danger: #b3453a;
+  --bro-info: #4a6fa5;
+
+  --bro-border: rgba(28, 25, 23, 0.1);
+  --bro-border-strong: rgba(28, 25, 23, 0.18);
+
+  /* 投影。暖调而非中性灰——中性灰阴影压在奶油白上会显脏 */
+  --bro-shadow-1:
+    0 1px 2px -1px rgba(28, 25, 23, 0.08), 0 2px 6px -2px rgba(28, 25, 23, 0.06);
+  --bro-shadow-2:
+    0 2px 6px -2px rgba(28, 25, 23, 0.08),
+    0 8px 24px -8px rgba(28, 25, 23, 0.12);
+  --bro-shadow-3:
+    0 4px 12px -4px rgba(28, 25, 23, 0.1),
+    0 16px 48px -12px rgba(28, 25, 23, 0.18);
+
+  --bro-shadow-glass:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+    0 8px 32px -8px rgba(28, 25, 23, 0.12),
+    0 2px 8px -2px rgba(28, 25, 23, 0.06);
+}
+
+/* ============================================================
+   暗色模式 — Coding Terminal
+   近黑底、终端绿、单线框和等宽字体。它是 TUI 的视觉语言，
+   不是字符画渲染器；所有按钮、Canvas 和触控交互仍保留。
+   ============================================================ */
+
+:root.dark,
+:root[data-theme="dark"] {
+  --bro-brand-porcelain: #f4f1eb;
+  --bro-brand-ink: #050806;
+  --bro-brand-brass: #c9a35d;
+  --bro-brand-phosphor: #72f2a1;
+  --bro-brand-signal: #ffc857;
+  --bro-bg-base: #050806;
+  --bro-bg-sunken: #020403;
+  --bro-bg-raised: #09100b;
+  --bro-bg-elevated: #09100b;
+
+  --bro-glass-bg: rgba(7, 17, 10, 0.92);
+  --bro-glass-bg-heavy: rgba(5, 13, 8, 0.97);
+  --bro-glass-border: rgba(108, 240, 154, 0.22);
+  --bro-glass-edge: rgba(108, 240, 154, 0.1);
+  --bro-glass-blur: 0px;
+  --bro-glass-saturate: 100%;
+
+  --bro-fg-primary: #d8f3df;
+  --bro-fg-secondary: #91b99c;
+  --bro-fg-muted: #64806b;
+  --bro-fg-on-accent: #031006;
+
+  --bro-accent: #6cf09a;
+  --bro-accent-hover: #96ffb9;
+  --bro-accent-glow: rgba(108, 240, 154, 0.18);
+  --bro-accent-subtle: rgba(108, 240, 154, 0.1);
+
+  --bro-success: #5fa87c;
+  --bro-warning: #d4a44a;
+  --bro-danger: #d46a5e;
+  --bro-info: #6e93c4;
+
+  --bro-border: rgba(108, 240, 154, 0.14);
+  --bro-border-strong: rgba(108, 240, 154, 0.32);
+
+  /* 暗底上的投影靠压深而非染色，否则会在黑曜石上泛出一层灰膜 */
+  --bro-shadow-1:
+    0 1px 2px -1px rgba(0, 0, 0, 0.5), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+  --bro-shadow-2:
+    0 2px 6px -2px rgba(0, 0, 0, 0.55), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  --bro-shadow-3:
+    0 4px 12px -4px rgba(0, 0, 0, 0.6), 0 16px 48px -12px rgba(0, 0, 0, 0.55);
+
+  --bro-shadow-glass:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 8px 32px -8px rgba(0, 0, 0, 0.6), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   主题无关令牌
+   ============================================================ */
+
+:root {
+  /* 字体。JetBrains Mono 承担代码、数据与 TUI 模式全部文字 */
+  --bro-font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bro-font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* 间距，4pt 基准 */
+  --bro-space-1: 4px;
+  --bro-space-2: 8px;
+  --bro-space-3: 12px;
+  --bro-space-4: 16px;
+  --bro-space-5: 24px;
+  --bro-space-6: 32px;
+  --bro-space-7: 48px;
+  --bro-space-8: 64px;
+
+  /* 圆角 */
+  --bro-radius-sm: 8px;
+  --bro-radius-md: 12px;
+  --bro-radius-lg: 16px;
+  --bro-radius-xl: 20px;
+  --bro-radius-full: 999px;
+
+  /* 层级 */
+  --bro-z-base: 0;
+  --bro-z-sticky: 10;
+  --bro-z-dropdown: 20;
+  --bro-z-drawer: 40;
+  --bro-z-modal-backdrop: 100;
+  --bro-z-modal: 110;
+  --bro-z-toast: 1000;
+
+  /* 动效。退出时长为进入的 60~70%，退出快显得跟手 */
+  --bro-duration-micro: 150ms;
+  --bro-duration-state: 250ms;
+  --bro-duration-overlay-in: 300ms;
+  --bro-duration-overlay-out: 200ms;
+  --bro-duration-morph: 400ms;
+  --bro-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --bro-ease-in: ease-in;
+}
+
+/* ============================================================
+   工具类
+   仅放「跨页面反复出现、且必须一致」的极少数几条。
+   这里不是 utility 框架，多一条就多一个和上游撞名的机会。
+   ============================================================ */
+
+/* 额度、筹码、成本、计时器——一切会变动的数字都必须等宽字形，
+   否则数字一跳版面跟着抖（UI-DESIGN.md §3.2） */
+.bro-tabular {
+  font-variant-numeric: tabular-nums;
+}

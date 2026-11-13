@@ -1,0 +1,405 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 29% 94%;
+    --foreground: 30 11% 10%;
+    --card: 45 100% 99%;
+    --card-foreground: 30 11% 10%;
+    --popover: 45 100% 99%;
+    --popover-foreground: 30 11% 10%;
+
+    --primary: 41 53% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 41 53% 40%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 135 23% 3%;
+    --foreground: 139 51% 90%;
+    --card: 135 28% 5%;
+    --card-foreground: 139 51% 90%;
+    --popover: 135 28% 5%;
+    --popover-foreground: 139 51% 90%;
+
+    --primary: 142 80% 68%;
+    --primary-foreground: 135 68% 4%;
+
+    --secondary: 137 25% 9%;
+    --secondary-foreground: 139 51% 90%;
+
+    --muted: 137 25% 9%;
+    --muted-foreground: 135 21% 58%;
+    --accent: 137 25% 11%;
+    --accent-foreground: 139 51% 90%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 140 34% 19%;
+    --input: 140 34% 19%;
+    --ring: 142 80% 68%;
+    --radius: 0.2rem;
+  }
+}
+
+.glass {
+  background: rgba(255, 254, 250, 0.68);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.85),
+    0 14px 38px rgba(64, 48, 27, 0.08);
+}
+
+.dark .glass {
+  background: rgba(5, 13, 8, 0.96);
+  border: 1px solid rgba(108, 240, 154, 0.2);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.glass-card {
+  background: rgba(255, 254, 250, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.9),
+    0 16px 44px rgba(64, 48, 27, 0.09);
+}
+
+.dark .glass-card {
+  background: rgba(5, 13, 8, 0.96);
+  border: 1px solid rgba(108, 240, 154, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(108, 240, 154, 0.025);
+  backdrop-filter: none;
+}
+
+.glass-card-active {
+  background: rgba(155, 118, 48, 0.1);
+  border: 1px solid rgba(155, 118, 48, 0.42);
+}
+
+.dark .glass-card-active {
+  background: rgba(108, 240, 154, 0.08);
+  border: 1px solid rgba(108, 240, 154, 0.38);
+}
+
+.glass-header {
+  background: hsl(var(--background));
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-top: 2px solid hsl(var(--border));
+}
+
+.dark .glass-header {
+  background: hsl(var(--background));
+  border: none;
+  border-top: 2px solid hsl(var(--border));
+}
+
+[data-tauri-drag-region] {
+  -webkit-app-region: drag;
+}
+
+[data-tauri-no-drag],
+[data-tauri-drag-region] .no-drag {
+  -webkit-app-region: no-drag;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html {
+  @apply font-sans antialiased;
+  line-height: 1.5;
+  color-scheme: light;
+  overscroll-behavior: none;
+}
+
+body {
+  @apply m-0 p-0 text-sm;
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(
+      circle at 12% 4%,
+      rgba(255, 255, 255, 0.98),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(201, 163, 93, 0.17),
+      transparent 28%
+    ),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.24), transparent 52%);
+  color: hsl(var(--foreground));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+}
+
+html.dark body {
+  background-image:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(108, 240, 154, 0.08),
+      transparent 42%
+    ),
+    linear-gradient(rgba(108, 240, 154, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 240, 154, 0.02) 1px, transparent 1px);
+  background-size:
+    auto,
+    24px 24px,
+    24px 24px;
+}
+
+html.dark body::before {
+  opacity: 0.15;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 3px,
+    rgba(114, 242, 161, 0.035) 4px
+  );
+}
+
+.coding-bro-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.coding-bro-shell::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: 42vw;
+  height: 42vw;
+  right: -20vw;
+  bottom: -28vw;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(175, 134, 59, 0.11),
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+.dark .coding-bro-shell::before {
+  background: radial-gradient(
+    circle,
+    rgba(114, 242, 161, 0.055),
+    transparent 68%
+  );
+}
+
+.coding-bro-header {
+  border-bottom: 1px solid var(--bro-border);
+  box-shadow: 0 8px 28px rgba(66, 47, 20, 0.035);
+}
+
+.dark .coding-bro-header {
+  box-shadow: 0 1px 0 rgba(114, 242, 161, 0.04);
+}
+
+.dark .coding-bro-header::before {
+  content: "CODING_BRO // READY";
+  color: var(--bro-accent);
+  font-family: var(--bro-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  opacity: 0.48;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+.status-heartbeat {
+  opacity: 1;
+  transition-property: color, opacity;
+  transition-duration: 150ms, 300ms;
+  transition-timing-function: ease, ease-out;
+}
+
+html[data-window-active="true"][data-status-heartbeat="true"]
+  .status-heartbeat {
+  opacity: 0.5;
+}
+
+html[data-window-active="false"] .status-heartbeat {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+@keyframes pi-thinking-popover-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(22px, 0, 0) scale(0.94);
+  }
+  68% {
+    opacity: 1;
+    transform: translate3d(-2px, 0, 0) scale(1.008);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes pi-thinking-popover-out {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(12px, 0, 0) scale(0.97);
+  }
+}
+
+.pi-thinking-popover {
+  transform-origin: var(--radix-popover-content-transform-origin);
+  will-change: transform, opacity;
+}
+
+.pi-thinking-popover[data-state="open"] {
+  animation: pi-thinking-popover-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pi-thinking-popover[data-state="closed"] {
+  animation: pi-thinking-popover-out 150ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-heartbeat {
+    opacity: 1;
+    transition-property: color;
+  }
+
+  html[data-window-active="true"][data-status-heartbeat="true"]
+    .status-heartbeat {
+    opacity: 1;
+  }
+
+  .pi-thinking-popover[data-state] {
+    animation: none;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .scroll-overlay {
+    scrollbar-gutter: stable both-edges;
+    padding-right: 0.5rem;
+    margin-right: -0.5rem;
+    overflow-x: hidden;
+  }
+
+  .border-default {
+    border-width: 1px;
+    border-color: hsl(var(--border));
+  }
+
+  .border-active {
+    border-width: 2px;
+  }
+
+  .border-border-default {
+    border-color: hsl(var(--border));
+  }
+
+  .border-border-active {
+    border-color: hsl(var(--primary));
+  }
+
+  .border-border-hover {
+    border-color: hsl(var(--primary) / 0.4);
+  }
+
+  .border-border-dragging {
+    border-color: hsl(var(--primary) / 0.6);
+  }
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/*
+ * Usage date-range picker popover.
+ *
+ * The two-column layout (date fields | calendar) must depend on how much
+ * width the popover itself actually has — not on the viewport. The popover is
+ * clamped to `100vw - 2rem` and anchored to its trigger, so a viewport-based
+ * breakpoint (e.g. Tailwind `sm:`) could enable the wide layout while the
+ * popover only had room for one column, pushing the calendar off-screen.
+ *
+ * A container query keys the layout to the popover's own inline size. The base
+ * (stacked) layout is the safe fallback when container queries are
+ * unsupported, keeping the calendar fully visible at any width.
+ */
+.usage-range-popover {
+  container-type: inline-size;
+}
+
+@container (min-width: 500px) {
+  .usage-range-layout {
+    flex-direction: row;
+  }
+
+  .usage-range-fields {
+    width: 250px;
+    flex: none;
+  }
+
+  .usage-range-calendar {
+    min-width: 0;
+    flex: 1 1 0%;
+  }
+}

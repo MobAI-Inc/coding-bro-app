@@ -1,0 +1,324 @@
+.bro-billiards {
+  --billiards-shell: color-mix(in srgb, var(--bro-bg-raised) 92%, #f3e8d5);
+  --billiards-line: color-mix(in srgb, var(--bro-fg-primary) 12%, transparent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 264px);
+  gap: clamp(18px, 2.4vw, 32px);
+  align-items: start;
+  padding: clamp(18px, 2.4vw, 32px);
+  border: 1px solid var(--billiards-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 18% 8%,
+      color-mix(in srgb, var(--bro-accent) 12%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      var(--billiards-shell),
+      color-mix(in srgb, var(--bro-bg-base) 92%, #d8c8af)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+    0 24px 70px color-mix(in srgb, #1d160d 15%, transparent);
+}
+
+.bro-billiards__stage {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--billiards-line);
+  border-radius: 20px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--bro-bg-raised) 94%, #fff),
+    color-mix(in srgb, var(--bro-bg-sunken) 88%, #a98960)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+    0 18px 42px color-mix(in srgb, #130d08 20%, transparent);
+}
+.bro-billiards__stage::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  left: -35%;
+  top: 42px;
+  width: 28%;
+  height: calc(100% - 84px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--bro-accent) 14%, transparent),
+    transparent
+  );
+  transform: skewX(-12deg);
+  opacity: 0;
+  pointer-events: none;
+}
+.bro-billiards__stage.is-rolling::after {
+  animation: bro-billiards-shot-sweep 1.1s ease-out;
+}
+.bro-billiards__stage.is-my-turn {
+  border-color: color-mix(
+    in srgb,
+    var(--bro-accent) 38%,
+    var(--billiards-line)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+    0 18px 42px color-mix(in srgb, #130d08 20%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--bro-accent) 7%, transparent);
+}
+
+.bro-billiards__stage-head,
+.bro-billiards__stage-foot,
+.bro-billiards__panel-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--bro-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--bro-fg-muted);
+}
+.bro-billiards__stage-head {
+  padding: 1px 4px 10px;
+}
+.bro-billiards__stage-foot {
+  padding: 10px 4px 1px;
+}
+.bro-billiards__live,
+.bro-billiards__panel-kicker .is-active {
+  color: var(--bro-success);
+}
+.bro-billiards__live::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 15%, transparent);
+  animation: bro-billiards-live 1.8s ease-in-out infinite;
+}
+
+.bro-billiards__table {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 2 / 1;
+}
+.bro-billiards-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  box-shadow:
+    0 18px 34px rgba(14, 10, 7, 0.3),
+    0 2px 4px rgba(14, 10, 7, 0.4);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  cursor: crosshair;
+}
+.bro-billiards-canvas[aria-busy="true"] {
+  cursor: wait;
+}
+
+.bro-billiards__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--billiards-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bro-bg-raised) 94%, #fff);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 60%, transparent),
+    var(--bro-shadow-1);
+}
+.bro-billiards__panel-kicker {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--billiards-line);
+}
+.bro-billiards__status {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--bro-fg-primary);
+}
+.bro-billiards__status.is-active {
+  color: var(--bro-accent);
+}
+.bro-billiards__status--final {
+  color: var(--bro-success);
+}
+
+.bro-billiards__group-card {
+  padding: 13px;
+  border: 1px solid var(--billiards-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bro-bg-sunken) 76%, transparent);
+}
+.bro-billiards__group-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--bro-fg-muted);
+}
+.bro-billiards__group {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bro-fg-secondary);
+}
+.bro-billiards__ball-rack {
+  display: flex;
+  gap: 5px;
+  margin-top: 11px;
+}
+.bro-billiards__ball-rack i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 28%,
+    #fff 0 8%,
+    #d6a22a 18%,
+    #9d650d 78%
+  );
+  box-shadow:
+    inset -2px -2px 3px rgba(0, 0, 0, 0.28),
+    0 2px 4px rgba(0, 0, 0, 0.18);
+}
+.bro-billiards__ball-rack i.is-stripe {
+  background: linear-gradient(
+    to bottom,
+    #f7f4eb 0 30%,
+    #3569a8 31% 68%,
+    #f7f4eb 69%
+  );
+}
+.bro-billiards__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--bro-fg-muted);
+}
+.bro-billiards__bot-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--bro-accent);
+  background: color-mix(in srgb, var(--bro-accent) 8%, transparent);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--bro-fg-secondary);
+}
+.bro-billiards__reject {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--bro-danger) 22%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bro-danger) 9%, transparent);
+  font-size: 13px;
+  color: var(--bro-danger);
+  animation: bro-billiards-reject 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 兼容仍被独立测试的字符渲染器；正式对局页面始终挂 Canvas。 */
+.bro-billiards-tui {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  outline-offset: 4px;
+}
+.bro-billiards-tui:focus-visible {
+  outline: 2px solid var(--bro-accent);
+}
+.bro-billiards-tui__table {
+  margin: 0;
+  font-size: clamp(9px, 1.1vw, 14px);
+  line-height: 1.15;
+  color: var(--bro-fg-secondary);
+  font-variant-east-asian: proportional-width;
+}
+.bro-billiards-tui__status {
+  font-family: var(--bro-font-mono);
+  font-size: 12px;
+  color: var(--bro-fg-muted);
+}
+
+@keyframes bro-billiards-live {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+@keyframes bro-billiards-reject {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@keyframes bro-billiards-shot-sweep {
+  0% {
+    left: -35%;
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 920px) {
+  .bro-billiards {
+    grid-template-columns: 1fr;
+  }
+  .bro-billiards__panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bro-billiards__panel-kicker,
+  .bro-billiards__reject {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 600px) {
+  .bro-billiards {
+    padding: 12px;
+    border-radius: 16px;
+  }
+  .bro-billiards__stage {
+    padding: 8px;
+  }
+  .bro-billiards__stage-head,
+  .bro-billiards__stage-foot {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+  .bro-billiards__panel {
+    grid-template-columns: 1fr;
+  }
+  .bro-billiards__panel-kicker,
+  .bro-billiards__reject {
+    grid-column: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bro-billiards__live::before,
+  .bro-billiards__reject,
+  .bro-billiards__stage.is-rolling::after {
+    animation: none;
+  }
+}

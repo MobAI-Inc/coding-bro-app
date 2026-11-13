@@ -1,0 +1,219 @@
+/**
+ * 中国象棋对局界面样式。
+ *
+ * 亮暗两套共用同一份布局，只有棋盘区的渲染方式不同（Canvas / 字符网格）。
+ * 棋盘容器带 `.bro-game-viewport`，玻璃护栏会据此关掉该区域内的模糊与
+ * 投影——对局区帧率优先，护栏由 tests/themes/tokens.test.ts 强制。
+ *
+ * 本文件不出现 `backdrop-filter`：对局区是每帧重绘的区域，模糊会把 GPU 吃光。
+ */
+
+.bro-xiangqi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: var(--bro-space-5);
+  align-items: start;
+  padding: var(--bro-space-5);
+}
+
+/* 棋盘容器的比例必须与 render/layout.ts 的 BOARD_ASPECT 一致（10 : 11，
+   即 9×10 交叉点各留一格边距）。照抄围棋写 aspect-ratio: 1 会让 Canvas
+   拿到一个方形容器，算出来的格子偏小，棋盘缩在中间一小块。 */
+.bro-xiangqi__board {
+  position: relative;
+  aspect-ratio: 10 / 11;
+  width: 100%;
+  max-width: 640px;
+  min-width: 0;
+}
+
+.bro-xiangqi-canvas {
+  display: block;
+  border-radius: var(--bro-radius-md);
+  /* 投影画在 CSS 层，画布内不再重复加，免得棋盘边缘出现双重阴影 */
+  box-shadow: var(--bro-shadow-2);
+}
+
+.bro-xiangqi__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bro-space-3);
+}
+
+.bro-xiangqi__status {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bro-fg-primary);
+}
+
+/* 将军提示。象棋里唯一「没看见就直接输」的状态，给足视觉重量：
+   加粗 + 描边 + 底色，不只是换个字色——弱视用户单靠颜色分辨不出来。 */
+.bro-xiangqi__check {
+  margin: 0;
+  padding: var(--bro-space-2) var(--bro-space-3);
+  border: 1px solid var(--bro-danger);
+  border-radius: var(--bro-radius-sm);
+  background: var(--bro-bg-sunken);
+  color: var(--bro-danger);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bro-xiangqi__side {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bro-fg-muted);
+  /* 手数会随对局增长，等宽数字避免进位时版面抖动 */
+  font-variant-numeric: tabular-nums;
+}
+
+.bro-xiangqi__captured {
+  margin: 0;
+  font-family: var(--bro-font-mono);
+  font-size: 13px;
+  color: var(--bro-fg-muted);
+  /* 被吃的子越攒越多，允许换行，不要撑破侧栏 */
+  overflow-wrap: anywhere;
+}
+
+.bro-xiangqi__reject {
+  margin: 0;
+  font-size: 13px;
+  color: var(--bro-danger);
+}
+
+.bro-xiangqi__actions {
+  display: flex;
+  gap: var(--bro-space-2);
+}
+
+.bro-xiangqi__action {
+  flex: 1;
+  height: 36px;
+  padding: 0 var(--bro-space-3);
+  border: 1px solid var(--bro-border);
+  border-radius: var(--bro-radius-md);
+  background: transparent;
+  color: var(--bro-fg-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform var(--bro-duration-micro) var(--bro-ease-out);
+}
+
+.bro-xiangqi__action:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.bro-xiangqi__action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bro-xiangqi__action--danger {
+  border-color: var(--bro-danger);
+  color: var(--bro-danger);
+}
+
+/* ============================================================
+   TUI 棋盘（暗色模式）
+   ============================================================ */
+
+.bro-xiangqi-tui {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bro-space-3);
+  /* 键盘操作的落点，必须有可见焦点环——TUI 模式全靠键盘 */
+  outline-offset: 4px;
+}
+
+.bro-xiangqi-tui:focus-visible {
+  outline: 2px solid var(--bro-accent);
+}
+
+/* 棋盘是 CSS 网格，不是 `white-space: pre` 的文本块。
+   `帥車砲` 是全宽汉字，行号与列标是半宽字符，靠字符宽度对不齐——
+   列宽由这里的 grid-template-columns 保证，字形宽度不齐也不影响
+   （见 render/tui-text.ts 与 lobby/catalog.ts 里记下的同一条教训）。 */
+.bro-xiangqi-tui__board {
+  display: grid;
+  grid-template-columns: repeat(10, 1.7em);
+  justify-content: start;
+  font-size: clamp(13px, 2vw, 20px);
+  color: var(--bro-fg-secondary);
+}
+
+.bro-xiangqi-tui__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  /* 网格已经定死了列宽，字形再宽也不许把格子撑开 */
+  overflow: hidden;
+}
+
+.bro-xiangqi-tui__cell--label {
+  color: var(--bro-fg-muted);
+  font-size: 0.7em;
+}
+
+.bro-xiangqi-tui__cell--river {
+  color: var(--bro-info);
+}
+
+/* 红黑不靠颜色单独区分：字形本身就是两套（帥/將、俥/車……见 render/glyphs.ts），
+   红方另加下划线。灰度屏与色觉障碍下仍分得清敌我（UI-DESIGN.md §9）。 */
+.bro-xiangqi-tui__cell--red {
+  color: var(--bro-danger);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.bro-xiangqi-tui__cell--black {
+  color: var(--bro-fg-primary);
+  font-weight: 700;
+}
+
+/* 可走的空点。用底色而不是替换字符，替换了就看不出那一格原本是什么 */
+.bro-xiangqi-tui__cell--target {
+  background: var(--bro-accent-subtle);
+}
+
+/* 可吃的敌子。与 target 分开：吃子是不可逆的，值得比「走过去」更重的提示 */
+.bro-xiangqi-tui__cell--capture {
+  outline: 2px solid var(--bro-success);
+  outline-offset: -2px;
+}
+
+.bro-xiangqi-tui__cell--last {
+  outline: 1px dashed var(--bro-info);
+  outline-offset: -1px;
+}
+
+.bro-xiangqi-tui__cell--selected {
+  background: var(--bro-accent);
+  color: var(--bro-fg-on-accent);
+}
+
+/* 光标：反色块。靠底色而非字符变化标记位置，这样光标压在棋子上时
+   仍看得出那里是什么子。放在 selected 之后，两者叠加时以光标为准。 */
+.bro-xiangqi-tui__cell--cursor {
+  background: var(--bro-accent-hover);
+  color: var(--bro-fg-on-accent);
+}
+
+/* 将军格排在最后，压过其余所有标记——它是最要紧的一句话，不许被盖住 */
+.bro-xiangqi-tui__cell--check {
+  background: var(--bro-danger);
+  color: var(--bro-fg-on-accent);
+  font-weight: 700;
+}
+
+.bro-xiangqi-tui__status {
+  font-family: var(--bro-font-mono);
+  font-size: 12px;
+  color: var(--bro-fg-muted);
+  /* 状态栏一行放不下就换行，宁可占两行也不要把快捷键截掉——
+     §6.3 要求列出的快捷键与实际生效的完全一致，截断就等于说了半句话 */
+  white-space: normal;
+}
